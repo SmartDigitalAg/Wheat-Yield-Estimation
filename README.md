@@ -1,4 +1,4 @@
-### Input
+### [Input](input)
 - [통계청 밀 생산량 데이터](input/kosis_wheat)
 - [한국행정구역분류.xlsx](input/한국행정구역분류.xlsx): 행정구역 영문표기
 - [지점코드.xlsx](input/지점코드.xlsx): 기상데이터 불러오기 위한 측구소 정보
@@ -40,3 +40,20 @@
 - [generate_input/input_report.py](generate_input/input_report.py)
   - ```output/input_report```
   - target: 맥류작황보고서 생산량
+
+### [models](models)
+수집한 데이터로 밀 생산량을 예측하기 위한 모델
+
+모든 모델의 결과는 ```output/model_result```에서 csv 형식으로 score와 png 형식으로 산점도 확인
+
+- [models/app.py](models/app.py)
+  - ```streamlit run models/app.py```
+  - 변수간 상관관계 확인을 위한  streamlit 앱
+- [models/linear_model.py](models/linear_model.py)
+  - sklearn의 LinearRegression을 사용한 모델
+- [models/randomforest_model.py](models/randomforest_model.py)
+  - sklearn의 RandomForestRegressor을 사용한 모델
+- [models/xgb_model.py](models/xgb_model.py)
+  - xgboost의 XGBRegressor을 사용한 모델
+- [models/all.py](models/all.py)
+  - LinearRegression, RandomForestRegressor, XGBRegressor 한 번에 돌리는 코드

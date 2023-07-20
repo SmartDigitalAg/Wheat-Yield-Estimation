@@ -6,11 +6,11 @@ from sklearn.metrics import mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
 
 def main():
-    output_dir = "../../output/model_result"
+    output_dir = "../output/model_result"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    df = pd.read_csv("../../output/input_kosis/전국_기상.csv")
+    df = pd.read_csv("../output/input_kosis/전국_기상.csv")
 
     df['rainfall_sum'] = df.filter(regex='rainfall').sum(axis='columns')
     df['sunshine_sum'] = df.filter(regex='sunshine').sum(axis='columns')
