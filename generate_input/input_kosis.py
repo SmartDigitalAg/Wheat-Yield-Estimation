@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-def merge_data(stn_Nm):
-    period_df = pd.read_csv(f"../output/weather/period_{stn_Nm}.csv")
+def merge_data(stn_Ids):
+    period_df = pd.read_csv(f"../output/weather/period_{stn_Ids}.csv")
 
     period_df['eff_tavg'] = period_df['tavg'].apply(lambda x: x - 5 if x >= 5 else 0)
     period_df['cumsum_tavg'] = period_df.groupby('season_year')['eff_tavg'].transform(pd.Series.cumsum)
@@ -44,12 +44,22 @@ def main():
     for idx, row in info_df.iterrows():
         stn_Nm = row['지점명']
         filename = row['파일명']
+        stn_Ids = row['지점코드']
 
-        weather = merge_data(stn_Nm)
-        weather['year'] = weather['season_year']
+        period = merge_data(stn_Ids)
+        summary = pd.read_csv(f"../output/weather/summary_{stn_Ids}.csv")
         wheat = pd.read_csv(f'../output/kosis/{filename}.csv')
+
+        period['year'] = period['season_year']
+        period = period.drop(columns = ['cumsum_tavg', 'season_year'])
+        summary['year'] = summary['season_year']
         wheat = wheat[wheat['item'] == '단위생산량']
+
+
+        weather = pd.merge(period, summary, on='year', how='inner')
         weather_wheat = pd.merge(wheat, weather, on='year', how='inner')
+
+
         weather_wheat.to_csv(os.path.join(output_dir, f"{stn_Nm}_기상.csv"), index=False, encoding="utf-8-sig")
 
         list_dfs.append(weather_wheat)
