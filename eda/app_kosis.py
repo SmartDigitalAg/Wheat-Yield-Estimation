@@ -43,16 +43,7 @@ def draw_scatter_plot(df):
                  c_list
                  )
 
-    s_list = list(df['lo2'].unique())
-    s_list.insert(0, '전체')
-    op_station = st.selectbox("지역",
-                 s_list
-    )
-
-    if op_station != '전체':
-        df_select = df[df['지역'] == op_station]
-    else:
-        df_select = df
+    df_select = df
 
 
     fig = plt.figure(figsize=(5,5))

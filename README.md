@@ -55,5 +55,5 @@
   - sklearn의 RandomForestRegressor을 사용한 모델
 - [models/xgb_model.py](models/xgb_model.py)
   - xgboost의 XGBRegressor을 사용한 모델
-- [models/all.py](models/kosis_models.py)
+- [models/all.py](models/models_kosis.py)
   - LinearRegression, RandomForestRegressor, XGBRegressor 한 번에 돌리는 코드

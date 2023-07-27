@@ -31,6 +31,7 @@ def main():
         os.makedirs(output_dir)
 
     df = pd.read_csv("../output/input_report/맥류작황보고서.csv")
+    # df = df[df['완전종실중(kg/10a)'] != 0]
 
     # '지역', '재배조건', '품종', '생체중(g/㎡)', '건물중(g/㎡,%)', '건물중비율(%)', 'year',
     # '초장(cm)_12월10일', '초장(cm)_2월20일', '초장(cm)_3월20일', '초장(cm)_4월10일',
@@ -86,8 +87,6 @@ def main():
         plt.ylabel("Predicted")
         plt.title(f"{type(model).__name__} | mae: {mae:.4f} | r2: {r2:.4f}")
         plt.show()
-
-        print(y_predict)
 
     # 결과를 DataFrame으로 정리
     results_df = pd.DataFrame(results)
