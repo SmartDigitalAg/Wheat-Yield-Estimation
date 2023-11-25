@@ -140,6 +140,21 @@ def preprocess_harvesting(filename, sheet_name='23.06.12(수확)', check_date = 
 
     return df_merged
 
+def preprocess_drone():
+    drone_filename = '../input/iksan/샘플링위치별_식생지수및수확량.xlsx'
+    df = pd.read_excel(drone_filename, sheet_name='샘플링위치별_식생지수및수확량')
+    df['조사지'] = df['ID'].apply(lambda x: f'Plot {((x - 1) // 10) + 1}')
+    df['반복'] = df.groupby('조사지').cumcount() + 1
+    # date_list = [col.split('_')[0] for col in df.columns if '_' in col]
+    # ['230501', '230601', '230130', '230321', '230615', '230417', '230520']
+    # ['230326', '230417', '230504', '230519', '230601', '230612']
+    date_dict = {'230130': '분얼전','230321':'분얼전기', '230417':'분얼후기', '230501':'개화기', '230520':'개화후2주', '230601':'개화후4주',  '230615':'수확기'}
+    df.columns = [f'{col.split("_")[1]}_{date_dict[col.split("_")[0]]}' if '_' in col else col for col in df.columns]
+    df = df.drop(columns=['ID', 'yield(kg/10a)'])
+    return df
+
+
+
 def generate_data(filename):
     tillering_pro = preprocess_tillering_pro(filename)
     tillering_telo = preprocess_tillering_telo(filename)
@@ -148,11 +163,15 @@ def generate_data(filename):
     flowering4 = preprocess_flowering4(filename)
     harvesting = preprocess_harvesting(filename)
 
+    drone = preprocess_drone()
+
     df_all = pd.merge(tillering_pro, tillering_telo, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering1, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering2, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering4, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, harvesting, on=['반복', '조사지'], how='inner')
+    df_all = pd.merge(df_all, drone, on=['반복', '조사지'], how='inner')
+
 
     return df_all
 
