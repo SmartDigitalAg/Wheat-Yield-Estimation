@@ -55,7 +55,12 @@ def preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date):
     return df_merged
 
 
-def preprocess_tillering_pro(filename, sheet_name='23.03.26(분얼전기', check_date = '3월 26일'):
+def preprocess_merge(df_merged, step_name):
+    df_merged = df_merged.drop(columns='조사일')
+    df_merged.columns = [col + f'_{step_name}' if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
+    return df_merged
+
+def preprocess_tillering_pro(filename, sheet_name='23.03.26(분얼전기', check_date = '3월 26일',  step_name = '분얼전기'):
     df_height = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I', skiprows=3).iloc[:17, :]
     df_length = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I', skiprows=24).iloc[:12, :]
     df_spad = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I', skiprows=40).iloc[:12, :]
@@ -67,13 +72,12 @@ def preprocess_tillering_pro(filename, sheet_name='23.03.26(분얼전기', check
 
 
     df_merged = preprocess_tilering(df_height, df_length, df_spad, df_lai, df_fresh, df_dry, df_dryrate, check_date)
-    df_merged = df_merged.drop(columns='조사일')
-    df_merged.columns = [col + '_분얼전기' if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
+    df_merged = preprocess_merge(df_merged, step_name)
 
     return df_merged
 
 
-def preprocess_tillering_telo(filename, sheet_name='23.04.17(분얼후기)', check_date = '4월 17일'):
+def preprocess_tillering_telo(filename, sheet_name='23.04.17(분얼후기)', check_date = '4월 17일',  step_name = '분얼후기'):
     df_height = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I', skiprows=3).iloc[:12, :]
     df_length = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I', skiprows=18).iloc[:5, :]
     df_spad = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I', skiprows=26).iloc[:12, :]
@@ -85,11 +89,10 @@ def preprocess_tillering_telo(filename, sheet_name='23.04.17(분얼후기)', che
 
 
     df_merged = preprocess_tilering(df_height, df_length, df_spad, df_lai, df_fresh, df_dry, df_dryrate,  check_date)
-    df_merged = df_merged.drop(columns='조사일')
-    df_merged.columns = [col + '_분얼후기' if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
+    df_merged = preprocess_merge(df_merged, step_name)
     return df_merged
 
-def preprocess_flowering1(filename, sheet_name='23.05.04(개화기)',  check_date = '5월 4일'):
+def preprocess_flowering1(filename, sheet_name='23.05.04(개화기)',  check_date = '5월 4일',  step_name = '개화기'):
     df_growth = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:I')
     df_yield = pd.read_excel(filename, sheet_name=sheet_name, header=[0, 1]).iloc[:32, 10:]
 
@@ -97,43 +100,41 @@ def preprocess_flowering1(filename, sheet_name='23.05.04(개화기)',  check_dat
     df_yield = preprocess_flowering_cols(df_yield, check_date, 'Unnamed')
 
     df_merged = pd.merge(df_growth, df_yield, on=['조사지', '조사일', '반복'], how='inner')
-    df_merged = df_merged.drop(columns='조사일')
+    df_merged = preprocess_merge(df_merged, step_name)
 
-    df_merged.columns = [col + '_개화기'  if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
     return df_merged
 
-def preprocess_flowering2(filename, sheet_name='23.05.19(개화후2주)', check_date = '5월 18일'):
+def preprocess_flowering2(filename, sheet_name='23.05.19(개화후2주)', check_date = '5월 18일',  step_name = '개화후2주'):
     df_growth = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:G')
     df_yield = pd.read_excel(filename, sheet_name=sheet_name, header=[0, 1]).iloc[:32, 9:]
     df_200 = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=[0, 1]).iloc[:32, 9:15]
     df_gyeong = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=0).iloc[1:, 16:21]
 
     df_merged = preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date)
-    df_merged = df_merged.drop(columns='조사일')
+    df_merged = preprocess_merge(df_merged, step_name)
 
-    df_merged.columns = [col + '_개화후2주'  if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
     return df_merged
 
-def preprocess_flowering4(filename, sheet_name='23.06.01(개화후4주)', check_date = '6월 2일'):
+def preprocess_flowering4(filename, sheet_name='23.06.01(개화후4주)', check_date = '6월 2일',  step_name = '개화후4주'):
     df_growth = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:G')
     df_yield = pd.read_excel(filename, sheet_name=sheet_name, header=[0, 1]).iloc[:32, 8:]
     df_200 = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=[0, 1]).iloc[:32, 8:14]
     df_gyeong = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=0).iloc[1:40, 15:20]
 
     df_merged = preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date)
-    df_merged = df_merged.drop(columns='조사일')
-    df_merged.columns = [col + '_개화후4주'  if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
+    df_merged = preprocess_merge(df_merged, step_name)
+
     return df_merged
 
-def preprocess_harvesting(filename, sheet_name='23.06.12(수확)', check_date = '6월 13일'):
+def preprocess_harvesting(filename, sheet_name='23.06.12(수확)', check_date = '6월 13일',  step_name = '수확기'):
     df_growth = pd.read_excel(filename, sheet_name=sheet_name, usecols='A:J')
     df_yield = pd.read_excel(filename, sheet_name=sheet_name, header=[0, 1]).iloc[:32, 11:]
     df_200 = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=[0, 1]).iloc[:32, 11:17]
     df_gyeong = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=0).iloc[1:49, 18:23]
 
     df_merged = preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date)
-    df_merged = df_merged.drop(columns='조사일')
-    df_merged.columns = [col + '_수확'  if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
+    df_merged = preprocess_merge(df_merged, step_name)
+
 
     df_actual = pd.read_excel(filename, sheet_name=sheet_name, skiprows=72, usecols='L:N').iloc[1:9, :]
 
