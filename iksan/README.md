@@ -37,10 +37,13 @@ MAE: 98.02 , R2score: 0.68, RMSE: 120.09
 
 #### 2차(드론 데이터 사용 O)
 * RandomForest
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6c9f868f-9889-478b-bb79-51c7f98d3648)
 
 변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행해봤으나, 성능이 오히려 나빠져서 그대로 둠.
 
 * XGB
+* 
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f3a40937-8340-4941-97b4-acdff61e3671)
 
 변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행했고, 성능이 향상됨.
 
