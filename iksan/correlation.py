@@ -35,8 +35,10 @@ def main():
     df['종자_생체중_수확'] = df['종자_생체중_수확'] * 25
 
     for step in step_names:
+        drop_columns = df.filter(like=f'생체중_{step}').columns | df.filter(like=f'건물중_{step}').columns
         selected_columns = df.filter(like=f'{step}').columns | df.filter(like='종자_생체중_수확').columns
         df_step  = df[selected_columns]
+        df_step =df_step.drop(columns=drop_columns)
         output_filename = os.path.join(fig_output_dir, f'{step}.png')
         draw_correlation(df_step,  output_filename)
 
