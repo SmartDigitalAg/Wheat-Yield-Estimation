@@ -1,3 +1,22 @@
+#### 2차(드론 데이터 사용 O)
+* RandomForest
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6c9f868f-9889-478b-bb79-51c7f98d3648)
+
+변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행해봤으나, 성능이 오히려 나빠져서 그대로 둠.
+
+* XGB
+* 
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f3a40937-8340-4941-97b4-acdff61e3671)
+
+변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행했고, 성능이 향상됨.
+
+'간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주',  'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주' + 조사지
+
+MAE: 95.69 , R2score: 0.74 , RMSE: 107.62
+
+![XGB2차](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/c466a68b-c7e4-4e86-93e6-fc1f727fa595)
+
+
 #### 1차(드론 데이터 사용 X)
 * RandomForest
 
@@ -35,20 +54,3 @@ MAE: 98.02 , R2score: 0.68, RMSE: 120.09
 
 ![XGB예측](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/9152075e-7413-4193-9233-54c54633b436)
 
-#### 2차(드론 데이터 사용 O)
-* RandomForest
-![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6c9f868f-9889-478b-bb79-51c7f98d3648)
-
-변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행해봤으나, 성능이 오히려 나빠져서 그대로 둠.
-
-* XGB
-* 
-![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f3a40937-8340-4941-97b4-acdff61e3671)
-
-변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행했고, 성능이 향상됨.
-
-'간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주',  'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주' + 조사지
-
-MAE: 95.69 , R2score: 0.74 , RMSE: 107.62
-
-![XGB2차](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/c466a68b-c7e4-4e86-93e6-fc1f727fa595)
