@@ -18,35 +18,14 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
-
-def draw_feature_importance(df, feature_importance_figname, feature_importance_filename):
-    y = df['종자_생체중_수확']
-    drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns
-    X = df.drop(columns=drop_columns).select_dtypes(exclude=['object'])
-    model = XGBRegressor(random_state=42)
-    model.fit(X, y)
-
-    feature_importance = model.feature_importances_
-    feature_importance_df = pd.DataFrame({'Feature': X.columns, 'Importance': feature_importance})
-    feature_importance_df = feature_importance_df.sort_values(by='Importance')
-
-    # Create a horizontal bar plot
-    plt.figure(figsize=(18, 6))
-    plt.barh(range(X.shape[1]), feature_importance_df['Importance'], align="center")
-    plt.yticks(range(X.shape[1]), feature_importance_df['Feature'])
-    plt.title("XGB Feature Importance")
-    plt.xlabel("Importance")
-    plt.savefig(feature_importance_figname)
-
-    feature_importance_df.to_csv(feature_importance_filename, index=False)
-
 def predict_yield(df, feature_predict_figname):
-    y = df['종자_생체중_수확']
+    y = df['종자_생체중_수확기']
     # drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns
     # X = df.drop(columns=drop_columns).select_dtypes(exclude=['object'])
     # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', '엽록소함량(µmol/m2)_개화후2주', '경수(20*20cm2)_개화후4주']
     plot_cols = df.filter(like='조사지').columns
-    X_cols = ['엽록소함량(µmol/m2)_개화후4주', '간장(cm)_개화후2주', 'SPAD_분얼전기',  '군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후2주']
+    # X_cols = ['엽록소함량(µmol/m2)_개화후4주', '간장(cm)_개화후2주', 'SPAD_분얼전기',  '군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후2주']
+    X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주',  'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주']
     X_cols =  list(plot_cols) + X_cols
     X = df[X_cols]
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
@@ -76,12 +55,6 @@ def predict_yield(df, feature_predict_figname):
     plt.savefig(feature_predict_figname)
 
 def main():
-    featurefig_output_dir = '../output/feature'
-    if not os.path.exists(featurefig_output_dir):
-        os.mkdir(featurefig_output_dir)
-    feature_importance_figname = os.path.join(featurefig_output_dir, 'XGB_feature_importance.png')
-    feature_importance_filename = os.path.join(featurefig_output_dir, 'XGB_feature_importance.csv')
-
     predict_output_dir = '../output/predict'
     if not os.path.exists(predict_output_dir):
         os.mkdir(predict_output_dir)
@@ -90,11 +63,10 @@ def main():
     data_filename = '../output/iksan_data.csv'
     df = pd.read_csv(data_filename)
     df = df[df['반복'] != '평균']
-    df['종자_생체중_수확'] = df['종자_생체중_수확'] * 25
+    df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
     df = pd.get_dummies(df, columns=['조사지'], prefix='조사지')
 
 
-    draw_feature_importance(df, feature_importance_figname, feature_importance_filename)
     predict_yield(df, feature_predict_figname)
 
 if __name__ == '__main__':
