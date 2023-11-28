@@ -35,7 +35,12 @@ def predict_yield(df, feature_predict_figname):
     # X_cols = ['GNDVI_개화후2주', '군집(LAI)_개화기', 'NDRE_개화기', '엽록소함량(µmol/m2)_개화후4주', 'CVI_개화후2주',
     #           '군집(LAI)_개화후2주', '간장(cm)_개화후2주', '관개', '시비', '파종']
 
-    X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', '엽록소함량(µmol/m2)_개화후4주']
+    # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', '엽록소함량(µmol/m2)_개화후4주']
+
+    X_cols = ['군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후2주', 'LAI_분얼후기', '간장(cm)_개화후2주',
+     '초장(cm)_분얼전기', 'SPAD_분얼전기', '초장(cm)_분얼후기', '군집(LAI)_개화후2주']
+    X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기']
+
     print(X_cols)
     plot_cols = ['관개', '시비', '파종']
     X_cols =  plot_cols + X_cols
@@ -77,7 +82,7 @@ def main():
         os.mkdir(predict_output_dir)
     feature_predict_figname = os.path.join(predict_output_dir, 'RF_predict.png')
 
-    data_filename = '../output/iksan_data_all_test.csv'
+    data_filename = '../output/iksan_data.csv'
     df = pd.read_csv(data_filename)
     # df = df[df['반복'] != '평균']
     df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25

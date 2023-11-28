@@ -76,9 +76,6 @@ def preprocess_harvesting_all_rep(df_growth, df_yield, df_200, df_gyeong, check_
     df_merged = df_merged.rename(columns={"조사지_x": "조사지", "조사일_x": "조사일", "반복_x": "반복"})
     # print(df_merged)
 
-    drone = preprocess_drone()
-    df_merged = pd.merge(df_merged, drone, on=['조사지', '반복'], how='left')
-
     # df_merged = pd.merge(df_merged, df_200, on=['조사지', '조사일', '반복'], how='left')
     # df_merged = pd.merge(df_merged, df_gyeong, on=['조사지', '조사일', '반복'], how='left')
 
@@ -94,6 +91,7 @@ def preprocess_harvesting_all_rep(df_growth, df_yield, df_200, df_gyeong, check_
 def preprocess_merge(df_merged, step_name):
     df_merged = df_merged.drop(columns='조사일')
     df_merged.columns = [col + f'_{step_name}' if '반복' not in col and '조사지' not in col else col for col in df_merged.columns]
+
     return df_merged
 
 def preprocess_tillering_pro(filename, sheet_name='23.03.26(분얼전기', check_date = '3월 26일',  step_name = '분얼전기'):
@@ -213,14 +211,12 @@ def generate_data(filename):
     flowering4 = preprocess_flowering4(filename)
     harvesting = preprocess_harvesting(filename)
 
-    drone = preprocess_drone()
-
     df_all = pd.merge(tillering_pro, tillering_telo, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering1, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering2, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering4, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, harvesting, on=['반복', '조사지'], how='inner')
-    df_all.to_csv("../output/iksan_data_plant.csv", index=False)
+    # df_all.to_csv("../output/iksan_data_plant.csv", index=False)
     # df_all = pd.merge(df_all, drone, on=['반복', '조사지'], how='inner')
     df_all['관개'] = 0
     df_all['시비'] = 0
@@ -229,9 +225,9 @@ def generate_data(filename):
     df_all['시비'] = df_all['조사지'].apply(lambda x: 1 if x == 'Plot 2' or x == 'Plot 3' or x == 'Plot 6' or x == 'Plot 7' else 0)
     df_all['파종'] = df_all['조사지'].apply(lambda x: 1 if x == 'Plot 5' or x == 'Plot 6' or x == 'Plot 7' or x == 'Plot 8' else 0)
 
-
-    df_drone = pd.merge(drone, harvesting, on=['반복', '조사지'], how='inner')
-    df_drone.to_csv("../output/iksan_data_drone.csv", index=False)
+    df_drone = preprocess_drone()
+    df_all = pd.merge(df_all, df_drone, on=['조사지', '반복'], how='left')
+    print(df_all.columns)
 
     return df_all
 
@@ -245,7 +241,7 @@ def main():
 
     df_all = generate_data(filename)
     # print(df_all[['관개', '시비', '파종']])
-    df_all.to_csv(os.path.join(output_dir, 'iksan_data_all_test.csv'), index=False)
+    df_all.to_csv(os.path.join(output_dir, 'iksan_data.csv'), index=False)
     # df_all.to_csv(output_filename, index=False)
 
 if __name__ == '__main__':

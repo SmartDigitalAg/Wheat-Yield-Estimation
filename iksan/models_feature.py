@@ -60,7 +60,7 @@ def main():
     featurefig_output_dir = '../output/feature'
     if not os.path.exists(featurefig_output_dir):
         os.mkdir(featurefig_output_dir)
-    filename = f'../output/iksan_data_all_test.csv'
+    filename = f'../output/iksan_data.csv'
 
     df = pd.read_csv(filename)
     # df = df[df['반복'] != '평균']

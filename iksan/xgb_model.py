@@ -73,7 +73,7 @@ def main():
         os.mkdir(predict_output_dir)
     feature_predict_figname = os.path.join(predict_output_dir, 'XGB_predict.png')
 
-    data_filename = '../output/iksan_data_all_test.csv'
+    data_filename = '../output/iksan_data.csv'
     df = pd.read_csv(data_filename)
     # df = df[df['반복'] != '평균']
     df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
