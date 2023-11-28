@@ -1,18 +1,32 @@
 #### 3차(드론 데이터 생체중/건조중 반복에 대해  LAI 등 조사결과 10반복 병합)
-변수 중요도에 따라 top 10 사용
+변수 중요도에 따라 top 4 사용
 
-* RabdomForest
+XGB 4개만 중요하게 나타남
 
-MAE: 92.93, R2score: 0.47, RMSE: 119.89
+RF 처음에 10개 다 쓰고 XGB 4개만 써서 똑같이 해봤는데 4개만 사용했을 때 더 좋은 성능
 
-![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/d65446a7-b638-4f93-82d9-e1ae8709e043)
+* RandomForest
+
+'간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', '엽록소함량(µmol/m2)_개화후4주' + 관개/시비/파종
+
+MAE: 88.93m, R2score: 0.50, RMSE: 117.07
+
+![RF importance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/08ff53b3-de89-46dd-a34d-70c6bdfa03bb)
+
+![RF predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/e0e66e84-11db-4835-acf6-77d5f55ebdb3)
 
 
 * XGB
 
-MAE: 94.51, R2score: 0.49, RMSE: 122.44
+'군집(LAI)_개화후2주', '초장(cm)_분얼후기', 'SPAD_분얼전기', '초장(cm)_분얼전기' + 관개/시비/파종
 
-![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/74715496-ceb1-4945-a8ec-f4f6e0021fdc)
+MAE: 86.31, R2score: 0.59, RMSE: 114.31
+
+![XGB importance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/8339cf68-d805-4799-9f22-117fa9f0508e)
+
+![XGB predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/9f25df1d-d73a-4fdd-9c1d-dec893cb092e)
+
+
 
 
 #### 2차(드론 데이터 사용 O)

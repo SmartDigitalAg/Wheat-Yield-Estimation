@@ -34,8 +34,8 @@ def predict_yield(df, feature_predict_figname):
     plot_cols = ['관개', '시비', '파종']
     X_cols = ['LAI_분얼전기', '간장(cm)_개화후4주', '엽록소함량(µmol/m2)_개화후2주', '군집(LAI)_개화기', '초장(cm)_분얼후기', 'LAI_분얼후기', '엽록소함량(µmol/m2)_개화후4주', 'SPAD_분얼전기', '군집(LAI)_개화후2주', '간장(cm)_개화후2주']
     # X_cols = ['간장(cm)_개화후4주', '엽록소함량(µmol/m2)_개화후2주', '군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '군집(LAI)_개화후2주', '간장(cm)_개화후2주']
-
-
+    X_cols = ['군집(LAI)_개화후2주', '초장(cm)_분얼후기', 'SPAD_분얼전기', '초장(cm)_분얼전기']
+    print(X_cols)
     X_cols =  plot_cols + X_cols
     X = df[X_cols]
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)

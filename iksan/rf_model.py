@@ -34,8 +34,9 @@ def predict_yield(df, feature_predict_figname):
     # X_cols = ['LAI_분얼후기', 'GNDVI_개화후2주', '군집(LAI)_개화기', '초장(cm)_분얼후기', 'NDRE_개화기', '엽록소함량(µmol/m2)_개화후4주', 'CVI_개화후2주', 'SPAD_분얼전기', '군집(LAI)_개화후2주', '간장(cm)_개화후2주', '관개', '시비', '파종']
     # X_cols = ['GNDVI_개화후2주', '군집(LAI)_개화기', 'NDRE_개화기', '엽록소함량(µmol/m2)_개화후4주', 'CVI_개화후2주',
     #           '군집(LAI)_개화후2주', '간장(cm)_개화후2주', '관개', '시비', '파종']
-    X_cols = ['LAI_분얼전기', '간장(cm)_개화후4주', '엽록소함량(µmol/m2)_개화후2주', '군집(LAI)_개화기', '초장(cm)_분얼후기', 'LAI_분얼후기',
-     '엽록소함량(µmol/m2)_개화후4주', 'SPAD_분얼전기', '군집(LAI)_개화후2주', '간장(cm)_개화후2주']
+
+    X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', '엽록소함량(µmol/m2)_개화후4주']
+    print(X_cols)
     plot_cols = ['관개', '시비', '파종']
     X_cols =  plot_cols + X_cols
     X = df[X_cols]
