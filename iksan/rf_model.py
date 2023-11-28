@@ -24,7 +24,10 @@ def predict_yield(df, feature_predict_figname):
     # X = df.drop(columns=drop_columns).select_dtypes(exclude=['object'])
 
     plot_cols = df.filter(like='조사지').columns
-    X_cols = ['SPAD_분얼전기', '간장(cm)_개화후2주', '군집(LAI)_개화후2주', '엽록소함량(µmol/m2)_개화후4주', '군집(LAI)_개화기']
+    # X_cols = ['간장(cm)_개화후2주', 'CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주',  'SPAD_분얼전기', 'NDRE_개화기',
+    #           '군집(LAI)_개화후2주', '군집(LAI)_개화기',]
+    X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주',  'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주', 'SPAD_분얼전기', 'NDRE_개화기']
+
     X_cols =  list(plot_cols) + X_cols
     X = df[X_cols]
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
@@ -65,6 +68,7 @@ def main():
     df = pd.read_csv(data_filename)
     df = df[df['반복'] != '평균']
     df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
+
     df = pd.get_dummies(df, columns=['조사지'], prefix='조사지')
     df = df.dropna(axis=1)
 

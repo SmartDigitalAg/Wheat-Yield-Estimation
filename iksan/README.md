@@ -2,10 +2,14 @@
 * RandomForest
 ![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6c9f868f-9889-478b-bb79-51c7f98d3648)
 
-변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행해봤으나, 성능이 오히려 나빠져서 그대로 둠.
+'간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주',  'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주', 'SPAD_분얼전기', 'NDRE_개화기' + 조사지
+
+MAE: 90.49, R2score: 0.14, RMSE: 110.22
+
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/3a86dd66-ca87-43f4-b6ec-dca7c2e38190)
 
 * XGB
-* 
+
 ![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f3a40937-8340-4941-97b4-acdff61e3671)
 
 변수 중요도에 따라 드론 데이터 변수를 몇 개 추가하여 실행했고, 성능이 향상됨.
