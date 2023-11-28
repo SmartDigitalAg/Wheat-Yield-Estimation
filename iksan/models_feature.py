@@ -20,18 +20,18 @@ from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
 
 def draw_feature_importance(df, featurefig_output_dir, model_name):
-    feature_importance_figname = os.path.join(featurefig_output_dir, f'{model_name}_feature_importance.png')
-    feature_importance_filename = os.path.join(featurefig_output_dir, f'{model_name}_feature_importance.csv')
+    feature_importance_figname = os.path.join(featurefig_output_dir, f'{model_name}importance.png')
+    feature_importance_filename = os.path.join(featurefig_output_dir, f'{model_name}importance.csv')
 
     model = None
-    if model_name == 'XGB':
+    if 'XGB' in model_name:
         model = XGBRegressor(random_state=42)
-    elif model_name == 'RF':
+    elif 'RF' in model_name:
         df = df.dropna(axis=1)
         model = RandomForestRegressor(n_estimators=100, random_state=42)
 
     y = df['종자_생체중_수확기']
-    drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns
+    drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns | df.filter(like='경수').columns#| df.filter(like='분얼').columns #| df.filter(like='경수').columns
     X = df.drop(columns=drop_columns).select_dtypes(exclude=['object'])
 
 
@@ -51,6 +51,8 @@ def draw_feature_importance(df, featurefig_output_dir, model_name):
     plt.title(f"{model_name} Top 10 Feature Importance")
     plt.xlabel("Importance")
     plt.savefig(feature_importance_figname)
+    print(model_name)
+    print(top_10_features['Feature'].to_list())
 
 def main():
     featurefig_output_dir = '../output/feature'
@@ -58,13 +60,21 @@ def main():
         os.mkdir(featurefig_output_dir)
 
 
-    data_filename = '../output/iksan_data.csv'
-    df = pd.read_csv(data_filename)
-    df = df[df['반복'] != '평균']
-    df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
+    # data_filename = '../output/iksan_data_drone.csv'
+    # data_filename = '../output/iksan_data_all.csv'
+    # # data_filename = '../output/iksan_data_plant.csv'
 
-    draw_feature_importance(df, featurefig_output_dir, 'XGB')
-    draw_feature_importance(df, featurefig_output_dir, 'RF')
+    file_dict = ['drone', 'plant', 'all_test']
+    for key in file_dict:
+        filename = f'../output/iksan_data_{key}.csv'
+
+        df = pd.read_csv(filename)
+        # df = df[df['반복'] != '평균']
+        df = df.drop(columns='반복')
+        df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
+
+        draw_feature_importance(df, featurefig_output_dir, f'XGB{key}')
+        draw_feature_importance(df, featurefig_output_dir, f'RF{key}')
 
 
 if __name__ == '__main__':

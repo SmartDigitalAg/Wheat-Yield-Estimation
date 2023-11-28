@@ -28,7 +28,7 @@ def main():
     if not os.path.exists(predict_output_dir):
         os.mkdir(predict_output_dir)
 
-    data_filename = '../output/iksan_data.csv'
+    data_filename = '../output/iksan_data_all.csv'
     df = pd.read_csv(data_filename)
     df = df.dropna(axis=1)
     df = df[df['반복'] != '평균']

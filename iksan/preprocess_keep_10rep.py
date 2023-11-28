@@ -18,9 +18,9 @@ def preprocess_tilering(df_height, df_length, df_spad, df_lai, df_fresh, df_dry,
     df_merged = pd.merge(df_height, df_length, on=['rep', '조사지'], how='inner')
     df_merged = pd.merge(df_merged, df_spad, on=['rep', '조사지'], how='inner')
     df_merged = pd.merge(df_merged, df_lai, on=['rep', '조사지'], how='inner')
-    df_merged = pd.merge(df_merged, df_fresh, on=['rep', '조사지'], how='inner')
-    df_merged = pd.merge(df_merged, df_dry, on=['rep', '조사지'], how='inner')
-    df_merged = pd.merge(df_merged, df_dryrate, on=['rep', '조사지'], how='inner')
+    df_merged = pd.merge(df_merged, df_fresh, on=['rep', '조사지'], how='left')
+    df_merged = pd.merge(df_merged, df_dry, on=['rep', '조사지'], how='left')
+    df_merged = pd.merge(df_merged, df_dryrate, on=['rep', '조사지'], how='left')
     df_merged = df_merged.rename(columns={'rep': '반복'})
     df_merged['조사일'] = check_date
     df_merged['반복'] = df_merged['반복'].apply(lambda x: '평균' if x == 'avg' else ('표준편차' if x=='stdev' else x))
@@ -49,9 +49,42 @@ def preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date):
     df_200 = preprocess_flowering_cols(df_200, check_date,  'Unnamed')
     df_gyeong = preprocess_flowering_cols(df_gyeong, check_date, '.')
     
-    df_merged = pd.merge(df_growth, df_yield, on=['조사지', '조사일', '반복'], how='inner')
-    df_merged = pd.merge(df_merged, df_200, on=['조사지', '조사일', '반복'], how='inner')
-    df_merged = pd.merge(df_merged, df_gyeong, on=['조사지', '조사일', '반복'], how='inner')
+    df_merged = pd.merge(df_growth, df_yield, on=['조사지', '조사일', '반복'], how='left')
+    # df_merged = pd.merge(df_merged, df_200, on=['조사지', '조사일', '반복'], how='left')
+    # df_merged = pd.merge(df_merged, df_gyeong, on=['조사지', '조사일', '반복'], how='left')
+    return df_merged
+
+
+def preprocess_harvesting_all_rep(df_growth, df_yield, df_200, df_gyeong, check_date):
+    df_growth = preprocess_flowering_cols(df_growth, check_date, '\n')
+    df_yield = preprocess_flowering_cols(df_yield, check_date, 'Unnamed')
+    # df_200 = preprocess_flowering_cols(df_200, check_date, 'Unnamed')
+    # df_gyeong = preprocess_flowering_cols(df_gyeong, check_date, '.')
+
+    # df_yield = df_yield.rename(columns={"반복": "수확반복"})
+    # df_growth = df_growth.set_index(['반복'])
+    # df_yield = df_yield.set_index(['반복'])
+    df_merged = pd.merge(df_growth, df_yield, how='cross')
+    df_merged = df_merged[df_merged["조사지_x"] == df_merged["조사지_y"]]
+    # df_merged = pd.merge(df_growth, df_yield, left_on=['조사지', '조사일', '반복'], right_on=['조사지', '조사일', '수확반복'], how='cross')
+    # print(df_merged.columns)
+    # print(df_merged)
+    # df_merged = df_merged.reset_index()
+    # print(df_merged.columns)
+    df_merged = df_merged[(df_merged["반복_y"] != "평균")]
+    df_merged = df_merged.drop(columns=df_merged.filter(like='_y').columns)
+    df_merged = df_merged.rename(columns={"조사지_x": "조사지", "조사일_x": "조사일", "반복_x": "반복"})
+    # print(df_merged)
+
+    # df_merged = pd.merge(df_merged, df_200, on=['조사지', '조사일', '반복'], how='left')
+    # df_merged = pd.merge(df_merged, df_gyeong, on=['조사지', '조사일', '반복'], how='left')
+
+    df_merged = df_merged[(df_merged["반복"] != "반복") & (df_merged["반복"] != "평균")]
+    # df_merged = df_merged.reset_index()
+    # print(df_merged[(df_merged["반복"] != "반복") & (df_merged["반복"] != "평균")])
+
+    print(df_merged)
+
     return df_merged
 
 
@@ -99,7 +132,7 @@ def preprocess_flowering1(filename, sheet_name='23.05.04(개화기)',  check_dat
     df_growth = preprocess_flowering_cols(df_growth, check_date, '\n')
     df_yield = preprocess_flowering_cols(df_yield, check_date, 'Unnamed')
 
-    df_merged = pd.merge(df_growth, df_yield, on=['조사지', '조사일', '반복'], how='inner')
+    df_merged = pd.merge(df_growth, df_yield, on=['조사지', '조사일', '반복'], how='left')
     df_merged = preprocess_merge(df_merged, step_name)
 
     return df_merged
@@ -132,7 +165,8 @@ def preprocess_harvesting(filename, sheet_name='23.06.12(수확)', check_date = 
     df_200 = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=[0, 1]).iloc[:32, 11:17]
     df_gyeong = pd.read_excel(filename, sheet_name=sheet_name, skiprows=36, header=0).iloc[1:49, 18:23]
 
-    df_merged = preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date)
+    # df_merged = preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date)
+    df_merged = preprocess_harvesting_all_rep(df_growth, df_yield, df_200, df_gyeong, check_date)
     df_merged = preprocess_merge(df_merged, step_name)
 
 
@@ -208,7 +242,8 @@ def main():
 
     df_all = generate_data(filename)
     # print(df_all[['관개', '시비', '파종']])
-    df_all.to_csv(output_filename, index=False)
+    df_all.to_csv(os.path.join(output_dir, 'iksan_data_all_test.csv'), index=False)
+    # df_all.to_csv(output_filename, index=False)
 
 if __name__ == '__main__':
     main()
