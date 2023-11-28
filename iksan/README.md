@@ -4,6 +4,7 @@
 ![fig_RFimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6ac82338-dacb-4b37-b737-48e5d6d6a852)
 
 * RandomForest-1(top10)
+
 '군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후2주', 'LAI_분얼후기', '간장(cm)_개화후2주', '초장(cm)_분얼전기', 'SPAD_분얼전기', '초장(cm)_분얼후기', '군집(LAI)_개화후2주' + 관개/시비/파종
 
 MAE: 91.90, R2score: 0.48, RMSE: 119.05
@@ -23,12 +24,25 @@ MAE: 88.14, R2score: 0.51, RMSE: 116.15
 
 * XGB
 
+![fig_XGBimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f615aa00-2b0e-4f67-bd2a-ea3510bbbb02)
+
+
+* XGB-1(top10)
+
+'군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후2주', 'LAI_분얼후기', '간장(cm)_개화후2주', '초장(cm)_분얼전기', 'SPAD_분얼전기', '초장(cm)_분얼후기', '군집(LAI)_개화후2주'+ 관개/시비/파종
+
+MAE: 86.75, R2score: 0.59 , RMSE: 114.41
+
+![XGB_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/ddc8aba7-7fc2-40b2-adaa-cc42718e61c2)
+
+
+* XGB-2(top4)
+
+4번째부터 중요도 확 낮아져서 4개만 사용해봄
+
 '군집(LAI)_개화후2주', '초장(cm)_분얼후기', 'SPAD_분얼전기', '초장(cm)_분얼전기' + 관개/시비/파종
 
 MAE: 86.31, R2score: 0.59, RMSE: 114.31
-
-
-![fig_XGBimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f615aa00-2b0e-4f67-bd2a-ea3510bbbb02)
 
 ![XGB_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/b9857ffb-c8e6-43f1-91c0-04f772d05d87)
 
