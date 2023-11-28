@@ -5,11 +5,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from matplotlib import font_manager, rc
+
 font_path = "C:/Windows/Fonts/NGULIM.TTF"
 font = font_manager.FontProperties(fname=font_path).get_name()
 rc('font', family=font)
 
 import warnings
+
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 from sklearn.linear_model import LinearRegression
@@ -27,12 +29,15 @@ def predict_yield(df, feature_predict_figname):
     # X_cols = ['간장(cm)_개화후2주', 'CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주',  'SPAD_분얼전기', 'NDRE_개화기',
     #           '군집(LAI)_개화후2주', '군집(LAI)_개화기',]
     # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주',  'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주', 'SPAD_분얼전기', 'NDRE_개화기']
-
     # X_cols = ['CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주', '간장(cm)_개화후2주', 'NDRE_개화기', '군집(LAI)_개화기', '군집(LAI)_개화후2주']
     # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'NDVI_개화후4주', 'CVI_개화후4주', '엽록소함량(µmol/m2)_개화후2주', 'SPAD_분얼전기','NDRE_개화기', '관개', '시비', '파종']
-    X_cols = ['LAI_분얼후기', 'GNDVI_개화후2주', '군집(LAI)_개화기', '초장(cm)_분얼후기', 'NDRE_개화기', '엽록소함량(µmol/m2)_개화후4주', 'CVI_개화후2주', 'SPAD_분얼전기', '군집(LAI)_개화후2주', '간장(cm)_개화후2주', '관개', '시비', '파종']
-
-    # X_cols =  list(plot_cols) + X_cols
+    # X_cols = ['LAI_분얼후기', 'GNDVI_개화후2주', '군집(LAI)_개화기', '초장(cm)_분얼후기', 'NDRE_개화기', '엽록소함량(µmol/m2)_개화후4주', 'CVI_개화후2주', 'SPAD_분얼전기', '군집(LAI)_개화후2주', '간장(cm)_개화후2주', '관개', '시비', '파종']
+    # X_cols = ['GNDVI_개화후2주', '군집(LAI)_개화기', 'NDRE_개화기', '엽록소함량(µmol/m2)_개화후4주', 'CVI_개화후2주',
+    #           '군집(LAI)_개화후2주', '간장(cm)_개화후2주', '관개', '시비', '파종']
+    X_cols = ['LAI_분얼전기', '간장(cm)_개화후4주', '엽록소함량(µmol/m2)_개화후2주', '군집(LAI)_개화기', '초장(cm)_분얼후기', 'LAI_분얼후기',
+     '엽록소함량(µmol/m2)_개화후4주', 'SPAD_분얼전기', '군집(LAI)_개화후2주', '간장(cm)_개화후2주']
+    plot_cols = ['관개', '시비', '파종']
+    X_cols =  plot_cols + X_cols
     X = df[X_cols]
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
 
@@ -50,16 +55,19 @@ def predict_yield(df, feature_predict_figname):
     print('RMSE: {:.2f}'.format(rmse))
 
     plt.clf()
-    plt.figure(figsize=(8, 6))
-    plt.scatter(y_test, y_predict, label='Test Data')
-    plt.scatter(y_train, model.predict(X_train), label='Training Data')
-    plt.plot([0, max(y_predict)], [0, max(y_predict)])
-    plt.xlabel("Actual")
-    plt.ylabel("Predicted")
-    plt.legend(loc='upper left')
-    plt.title(f"{type(model).__name__} | RMSE: {rmse:.4f} | r2: {r2score:.4f}")
+    fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+    ax.scatter(y_test, y_predict, label='Test Data')
+    ax.scatter(y_train, model.predict(X_train), label='Training Data')
+    # plt.plot([0, max(max(y_predict), max(y_test))], [0, max(max(y_predict), max(y_test))])
+    ax.set_xlim([0, max(max(y_predict), max(y_test)) * 1.05])
+    ax.set_ylim([0, max(max(y_predict), max(y_test)) * 1.05])
+    ax.plot([ax.get_xlim()[0], max(ax.get_xlim()[1], max(y_test))],
+            [ax.get_xlim()[0], max(ax.get_xlim()[1], max(y_test))])
+    ax.set_xlabel("Actual")
+    ax.set_ylabel("Predicted")
+    ax.legend(loc='upper left')
+    ax.set_title(f"{type(model).__name__} | RMSE: {rmse:.4f} | r2: {r2score:.4f}")
     plt.savefig(feature_predict_figname)
-
 
 
 def main():
@@ -73,11 +81,11 @@ def main():
     # df = df[df['반복'] != '평균']
     df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
 
-
     # df = pd.get_dummies(df, columns=['조사지'], prefix='조사지')
     df = df.dropna(axis=1)
 
     predict_yield(df, feature_predict_figname)
+
 
 if __name__ == '__main__':
     main()

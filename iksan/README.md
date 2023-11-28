@@ -1,3 +1,20 @@
+#### 3차(드론 데이터 생체중/건조중 반복에 대해  LAI 등 조사결과 10반복 병합)
+변수 중요도에 따라 top 10 사용
+
+* RabdomForest
+
+MAE: 92.93, R2score: 0.47, RMSE: 119.89
+
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/d65446a7-b638-4f93-82d9-e1ae8709e043)
+
+
+* XGB
+
+MAE: 94.51, R2score: 0.49, RMSE: 122.44
+
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/74715496-ceb1-4945-a8ec-f4f6e0021fdc)
+
+
 #### 2차(드론 데이터 사용 O)
 * RandomForest
 ![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6c9f868f-9889-478b-bb79-51c7f98d3648)

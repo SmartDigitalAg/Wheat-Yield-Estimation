@@ -76,6 +76,9 @@ def preprocess_harvesting_all_rep(df_growth, df_yield, df_200, df_gyeong, check_
     df_merged = df_merged.rename(columns={"조사지_x": "조사지", "조사일_x": "조사일", "반복_x": "반복"})
     # print(df_merged)
 
+    drone = preprocess_drone()
+    df_merged = pd.merge(df_merged, drone, on=['조사지', '반복'], how='left')
+
     # df_merged = pd.merge(df_merged, df_200, on=['조사지', '조사일', '반복'], how='left')
     # df_merged = pd.merge(df_merged, df_gyeong, on=['조사지', '조사일', '반복'], how='left')
 
@@ -218,7 +221,7 @@ def generate_data(filename):
     df_all = pd.merge(df_all, flowering4, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, harvesting, on=['반복', '조사지'], how='inner')
     df_all.to_csv("../output/iksan_data_plant.csv", index=False)
-    df_all = pd.merge(df_all, drone, on=['반복', '조사지'], how='inner')
+    # df_all = pd.merge(df_all, drone, on=['반복', '조사지'], how='inner')
     df_all['관개'] = 0
     df_all['시비'] = 0
     df_all['파종'] = 0
