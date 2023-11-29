@@ -30,7 +30,7 @@ MAE: 45.46, R2score: 0.52, RMSE: 54.24
 
 MAE: 57.22, R2score: 0.11, RMSE: 67.85
 
-![XGBplant_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/ba292f63-e39e-4359-9a17-57dc48f4ac47)
+![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/003f5cb5-2952-4919-b49d-3150a01fd929)
 
 2.1 XGB-drone 포함
 
