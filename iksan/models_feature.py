@@ -45,16 +45,34 @@ def draw_feature_importance(df, featurefig_output_dir, model_name):
     save_df.to_csv(feature_importance_filename, index=False)
 
     top_10_features = feature_importance_df.nlargest(10, 'Importance')
-    top_10_features = top_10_features.sort_values(by='Importance')
 
-    plt.figure(figsize=(18, 6))
-    plt.barh(range(10), top_10_features['Importance'], align="center")
-    plt.yticks(range(10), top_10_features['Feature'])
-    plt.title(f"{model_name} Top 10 Feature Importance")
-    plt.xlabel("Importance")
+    #------barh(가로)
+    top_10_features = top_10_features.sort_values(by='Importance')
+    plt.clf()
+    fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+    ax.barh(range(10), top_10_features['Importance'], align="center")
+    # ax.barh(range(10), top_10_features['Importance'], align="center", color="green", alpha=0.4)
+    ax.set_yticks(range(10))
+    ax.set_yticklabels(top_10_features['Feature'])
+    ax.set_title(f"{model_name} Top 10 Feature Importance")
+    ax.set_xlabel("Importance")
+    fig.tight_layout()
     plt.savefig(feature_importance_figname)
+
+    #------bar(세로)
+    # top_10_features = top_10_features.sort_values(by='Importance', ascending=False)
+    # plt.clf()
+    # fig, ax = plt.subplots(1, 1, figsize=(6, 6))
+    # ax.bar(top_10_features['Feature'], top_10_features['Importance'], align="center")
+    # plt.xticks(rotation=30, ha='right')
+    # ax.set_title(f"{model_name} Top 10 Feature Importance")
+    # ax.set_xlabel("Feature")
+    # ax.set_ylabel("Importance")
+    # fig.tight_layout()
+    # plt.savefig(feature_importance_figname)
+
     print(model_name)
-    print(top_10_features['Feature'].to_list())
+    print(save_df.head(10)['Feature'].to_list())
 
 def main():
     featurefig_output_dir = '../output/feature'

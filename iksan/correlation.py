@@ -30,10 +30,10 @@ def main():
     if not os.path.exists(fig_output_dir):
         os.mkdir(fig_output_dir)
 
-    step_names = ['분얼전기', '분얼후기', '개화기', '개화후2주', '개화후4주']
     df = pd.read_csv(data_filename)
     df['종자_생체중_수확'] = df['종자_생체중_수확'] * 25
 
+    step_names = ['분얼전기', '분얼후기', '개화기', '개화후2주', '개화후4주']
     for step in step_names:
         drop_columns = df.filter(like=f'생체중_{step}').columns | df.filter(like=f'건물중_{step}').columns
         selected_columns = df.filter(like=f'{step}').columns | df.filter(like='종자_생체중_수확').columns

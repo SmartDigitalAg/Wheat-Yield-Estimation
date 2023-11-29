@@ -57,6 +57,8 @@ def predict_yield(df, feature_predict_figname):
 
     plt.clf()
     fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+    # ax.scatter(y_test, y_predict, label='Test Data', color="coral")
+    # ax.scatter(y_train, model.predict(X_train), label='Training Data', color="green")
     ax.scatter(y_test, y_predict, label='Test Data')
     ax.scatter(y_train, model.predict(X_train), label='Training Data')
     # plt.plot([0, max(max(y_predict), max(y_test))], [0, max(max(y_predict), max(y_test))])
