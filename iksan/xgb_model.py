@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 from xgboost import XGBRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV, KFold
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
 
@@ -46,10 +46,28 @@ def predict_yield(df, feature_predict_figname):
     X_cols = plot_cols + X_cols
     X_cols = list(set(X_cols))
     X = df[X_cols]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
 
-    model = XGBRegressor(random_state=42)
-    model.fit(X_train, y_train)
+    # model = XGBRegressor()
+    # n_estimators = [50, 100, 150, 200, 250, 300, 350]
+    # max_depth = [2, 4, 6, 8, 10, 12, 14]
+    # param_grid = dict(max_depth=max_depth, n_estimators=n_estimators)
+    # kfold = KFold(n_splits=10, shuffle=True, random_state=7)
+    # grid_search = GridSearchCV(model, param_grid, scoring='neg_mean_squared_error', n_jobs=-1, cv=kfold, verbose=1)
+    # grid_result = grid_search.fit(X, y)
+    # # summarize results
+    # print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
+    # means = grid_result.cv_results_['mean_test_score']
+    # stds = grid_result.cv_results_['std_test_score']
+    # params = grid_result.cv_results_['params']
+    # for mean, stdev, param in zip(means, stds, params):
+    #     print("%f (%f) with: %r" % (mean, stdev, param))
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
+    model = XGBRegressor(max_depth=2, n_estimators=50, learning_rate=0.1, random_state=42)
+    model.fit(X_train, y_train,
+              eval_set=[(X_train, y_train), (X_test, y_test)],
+              early_stopping_rounds=200
+              )
     y_predict = model.predict(X_test)
 
     mae = mean_absolute_error(y_predict, y_test)
@@ -68,6 +86,7 @@ def predict_yield(df, feature_predict_figname):
     ax.scatter(y_test, y_predict, label='Test Data')
     ax.scatter(y_train, model.predict(X_train), label='Training Data')
     # plt.plot([0, max(max(y_predict), max(y_test))], [0, max(max(y_predict), max(y_test))])
+
     ax.set_xlim([0, max(max(y_predict), max(y_test)) * 1.05])
     ax.set_ylim([0, max(max(y_predict), max(y_test)) * 1.05])
     ax.plot([ax.get_xlim()[0], max(ax.get_xlim()[1], max(y_test))],

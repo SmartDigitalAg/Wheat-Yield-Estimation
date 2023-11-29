@@ -33,6 +33,14 @@ MAE: 58.53, R2score: 0.52, RMSE: 72.2
 
 ![XGB_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/32ad4a34-3c14-4584-9415-92f159fe1b07)
 
+* 예측결과(top10, max_depth=2, n_estimators=50, learning_rate=0.1, early_stopping_rounds=200)
+
+NDRE_분얼후기, 파종, CVI_개화기, CVI_분얼전기, 엽록소함량(µmol/m2)_개화기, GNDVI_분얼후기, CVI_개화후4주, RVI_분얼전기, NDVI_분얼전기, NDVI_개화기, 시비, 관개
+
+MAE: 46.24, R2score: 0.44, RMSE: 55.86
+
+![XGB_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/1ca9890e-a50e-4974-b383-7cfdd933cdcd)
+
 
 #### 4차(드론 데이터 생체중/건조중 반복에 대해  LAI 등 조사결과 10반복 병합)
 
