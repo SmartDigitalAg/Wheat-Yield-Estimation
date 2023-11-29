@@ -21,7 +21,7 @@ from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
 
 def predict_yield(df, feature_predict_figname):
-    y = df['종자_생체중_수확기']
+    y = df['drone_yield']
     # drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns
     # X = df.drop(columns=drop_columns).select_dtypes(exclude=['object'])
 
@@ -40,12 +40,15 @@ def predict_yield(df, feature_predict_figname):
     # X_cols = ['군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후2주', 'LAI_분얼후기', '간장(cm)_개화후2주',
     #  '초장(cm)_분얼전기', 'SPAD_분얼전기', '초장(cm)_분얼후기', '군집(LAI)_개화후2주']
     # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기']
-    X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', 'CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주', 'NDRE_개화기', '초장(cm)_분얼후기', '군집(LAI)_개화기', 'LAI_분얼전기', 'GNDVI_개화후2주']
+    # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', 'CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주', 'NDRE_개화기',
+    #           '초장(cm)_분얼후기', '군집(LAI)_개화기', 'LAI_분얼전기', 'GNDVI_개화후2주']
 
+    X_cols = ['CVI_개화기', 'NDRE_분얼후기', 'NDRE_개화후2주', 'GNDVI_분얼후기', '엽록소함량(µmol/m2)_개화기', 'GNDVI_개화후2주', '군집(LAI)_개화기', 'CVI_개화후2주', '초장(cm)_분얼전기', 'CVI_분얼전기']
 
-    print(X_cols)
+    print(", ".join(X_cols))
     plot_cols = ['관개', '시비', '파종']
-    X_cols =  plot_cols + X_cols
+    X_cols = plot_cols + X_cols
+    X_cols = list(set(X_cols))
     X = df[X_cols]
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
 
@@ -84,10 +87,10 @@ def main():
         os.mkdir(predict_output_dir)
     feature_predict_figname = os.path.join(predict_output_dir, 'RF_predict.png')
 
-    data_filename = '../output/iksan_data.csv'
+    data_filename = '../output/iksan_10data.csv'
     df = pd.read_csv(data_filename)
     # df = df[df['반복'] != '평균']
-    df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
+    # df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
 
     # df = pd.get_dummies(df, columns=['조사지'], prefix='조사지')
     df = df.dropna(axis=1)

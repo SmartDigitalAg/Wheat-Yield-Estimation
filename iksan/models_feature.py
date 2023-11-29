@@ -30,8 +30,9 @@ def draw_feature_importance(df, featurefig_output_dir, model_name):
         df = df.dropna(axis=1)
         model = RandomForestRegressor(n_estimators=100, random_state=42)
 
-    y = df['종자_생체중_수확기']
+    y = df['drone_yield']
     drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns | df.filter(like='경수').columns#| df.filter(like='분얼').columns #| df.filter(like='경수').columns
+    df = df.drop(columns='drone_yield')
     X = df.drop(columns=drop_columns).select_dtypes(exclude=['object'])
 
 
@@ -72,18 +73,18 @@ def draw_feature_importance(df, featurefig_output_dir, model_name):
     # plt.savefig(feature_importance_figname)
 
     print(model_name)
-    print(save_df.head(10)['Feature'].to_list())
+    print(list(reversed(top_10_features['Feature'].to_list())))
 
 def main():
     featurefig_output_dir = '../output/feature'
     if not os.path.exists(featurefig_output_dir):
         os.mkdir(featurefig_output_dir)
-    filename = f'../output/iksan_data.csv'
+    filename = f'../output/iksan_10data.csv'
 
     df = pd.read_csv(filename)
     # df = df[df['반복'] != '평균']
     df = df.drop(columns='반복')
-    df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
+    # df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
 
     draw_feature_importance(df, featurefig_output_dir, f'XGB')
     draw_feature_importance(df, featurefig_output_dir, f'RF')

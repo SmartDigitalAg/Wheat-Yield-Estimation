@@ -1,3 +1,37 @@
+#### 5차(드론데이터 + 생육조사데이터)
+* 10반복만 사용(생체중/건조중 엑셀에서 오른쪽의 데이터 사용X)
+* 생육조사 엑셀 시트에서 23.06.01(수확) 데이터는 input데이터에 포함되지 않음
+* 드론데이터의 가장 마지막 열에 있는 yield(kg/10a)을 예측
+
+1. RandomForest
+
+* 변수중요도
+
+![fig_RFimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/7b214652-acd8-4a55-ac38-0fead6b4d35d)
+
+* 예측 결과(top10)
+
+CVI_개화기, NDRE_분얼후기, NDRE_개화후2주, GNDVI_분얼후기, 엽록소함량(µmol/m2)_개화기, GNDVI_개화후2주, 군집(LAI)_개화기, CVI_개화후2주, 초장(cm)_분얼전기, CVI_분얼전기, 시비, 관개, 파종
+
+MAE: 45.46, R2score: 0.52, RMSE: 54.24
+
+![RF_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/1c3075a1-405f-46cf-8474-fa46a2f19f11)
+
+
+2. XGB
+
+* 변수중요도
+![fig_XGBimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/16472644-f3b3-487e-b17c-8593100057fb)
+
+* 예측 결과(top10)
+
+NDRE_분얼후기, 파종, CVI_개화기, CVI_분얼전기, 엽록소함량(µmol/m2)_개화기, GNDVI_분얼후기, CVI_개화후4주, RVI_분얼전기, NDVI_분얼전기, NDVI_개화기, 시비, 관개
+
+MAE: 58.53, R2score: 0.52, RMSE: 72.2
+
+![XGB_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/32ad4a34-3c14-4584-9415-92f159fe1b07)
+
+
 #### 4차(드론 데이터 생체중/건조중 반복에 대해  LAI 등 조사결과 10반복 병합)
 
 * RandomForest
