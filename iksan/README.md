@@ -28,7 +28,7 @@ MAE: 45.46, R2score: 0.52, RMSE: 54.24
 
 엽록소함량(µmol/m2)_개화기, 간장(cm)_개화후4주, 군집(LAI)_개화후4주, 군집(LAI)_개화후2주, 군집(LAI)_개화기, LAI_분얼전기, 관개, 1수영화수_개화기, 엽록소함량(µmol/m2)_개화후2주, 수장(cm)_개화후2주, 시비, 관개, 파종
 
-MAE: 57.22, R2score: 0.11, RMSE: 67.85
+MAE: 52.15, R2score: 0.04, RMSE: 65.56
 
 ![image](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/003f5cb5-2952-4919-b49d-3150a01fd929)
 
@@ -65,7 +65,8 @@ MAE: 46.24, R2score: 0.44, RMSE: 55.86
 
 엽록소함량(µmol/m2)_개화기, 군집(LAI)_개화기, 군집(LAI)_개화후2주, 간장(cm)_개화후4주, 수장(cm)_개화후4주, 초장(cm)_분얼전기, SPAD_분얼후기, LAI_분얼후기, 엽록소함량(µmol/m2)_개화후2주, 군집(LAI)_개화후4주, 시비, 관개, 파종
 
-MAE: 52.15, R2score: 0.04, RMSE: 65.56
+MAE: 57.22, R2score: 0.11, RMSE: 67.85
+
 
 ![XGBplant_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/ba292f63-e39e-4359-9a17-57dc48f4ac47)
 
