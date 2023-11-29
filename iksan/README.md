@@ -1,15 +1,16 @@
 #### 4차(드론 데이터 생체중/건조중 반복에 대해  LAI 등 조사결과 10반복 병합)
 
 * RandomForest
-![fig_RFimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/6ac82338-dacb-4b37-b737-48e5d6d6a852)
+
+![fig_RFimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/db1fa326-04bf-42e0-a42c-bb03e25e8495)
 
 * RandomForest-1(top10)
 
-'군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후2주', 'LAI_분얼후기', '간장(cm)_개화후2주', '초장(cm)_분얼전기', 'SPAD_분얼전기', '초장(cm)_분얼후기', '군집(LAI)_개화후2주' + 관개/시비/파종
+'간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', 'CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주', 'NDRE_개화기', '초장(cm)_분얼후기', '군집(LAI)_개화기', 'LAI_분얼전기', 'GNDVI_개화후2주'+관개/시비/파종
 
-MAE: 91.90, R2score: 0.48, RMSE: 119.05
+MAE: 95.32, R2score: 0.42, RMSE: 121.21
 
-![RF_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/a8c1c47b-10c9-43ea-b3da-c28e861286e3)
+![RF_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f98b67b6-c731-47de-9c27-5736816e407a)
 
 * RandomForest-2(top3)
 
@@ -24,8 +25,7 @@ MAE: 88.14, R2score: 0.51, RMSE: 116.15
 
 * XGB
 
-![fig_XGBimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/f615aa00-2b0e-4f67-bd2a-ea3510bbbb02)
-
+![fig_XGBimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/b4d7caab-edfe-415f-b0ab-20495a98f442)
 
 * XGB-1(top10)
 
