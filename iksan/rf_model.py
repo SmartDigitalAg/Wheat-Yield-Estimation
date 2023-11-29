@@ -43,8 +43,10 @@ def predict_yield(df, feature_predict_figname):
     # X_cols = ['간장(cm)_개화후2주', '군집(LAI)_개화후2주', 'SPAD_분얼전기', 'CVI_개화후2주', '엽록소함량(µmol/m2)_개화후4주', 'NDRE_개화기',
     #           '초장(cm)_분얼후기', '군집(LAI)_개화기', 'LAI_분얼전기', 'GNDVI_개화후2주']
 
+    #-------drone 포함
     X_cols = ['CVI_개화기', 'NDRE_분얼후기', 'NDRE_개화후2주', 'GNDVI_분얼후기', '엽록소함량(µmol/m2)_개화기', 'GNDVI_개화후2주', '군집(LAI)_개화기', 'CVI_개화후2주', '초장(cm)_분얼전기', 'CVI_분얼전기']
-
+    #-------생육조사결과만
+    X_cols = ['엽록소함량(µmol/m2)_개화기', '군집(LAI)_개화기', '군집(LAI)_개화후2주', '간장(cm)_개화후4주', '수장(cm)_개화후4주', '초장(cm)_분얼전기', 'SPAD_분얼후기', 'LAI_분얼후기', '엽록소함량(µmol/m2)_개화후2주', '군집(LAI)_개화후4주']
     print(", ".join(X_cols))
     plot_cols = ['관개', '시비', '파종']
     X_cols = plot_cols + X_cols
@@ -85,7 +87,7 @@ def main():
     predict_output_dir = '../output/predict'
     if not os.path.exists(predict_output_dir):
         os.mkdir(predict_output_dir)
-    feature_predict_figname = os.path.join(predict_output_dir, 'RF_predict.png')
+    feature_predict_figname = os.path.join(predict_output_dir, 'RFplant_predict.png')
 
     data_filename = '../output/iksan_10data.csv'
     df = pd.read_csv(data_filename)
@@ -100,3 +102,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # drone_filename = '../input/iksan/샘플링위치별_식생지수및수확량.xlsx'
+    # df = pd.read_excel(drone_filename, sheet_name='샘플링위치별_식생지수및수확량')
+    # df = df.drop(columns=['ID','yield(kg/10a)'])
+    # cols = [col.split("_")[1] for col in df.columns]
+    # cols = list(set(cols))
+    # print(cols)

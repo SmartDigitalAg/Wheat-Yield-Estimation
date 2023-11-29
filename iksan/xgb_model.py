@@ -41,7 +41,12 @@ def predict_yield(df, feature_predict_figname):
     # X_cols = ['군집(LAI)_개화기', '엽록소함량(µmol/m2)_개화후4주', '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후2주', 'LAI_분얼후기', '간장(cm)_개화후2주', '초장(cm)_분얼전기', 'SPAD_분얼전기', '초장(cm)_분얼후기', '군집(LAI)_개화후2주']
     # X_cols = ['군집(LAI)_개화후2주', '초장(cm)_분얼후기', 'SPAD_분얼전기', '초장(cm)_분얼전기', '간장(cm)_개화후2주', 'LAI_분얼후기', '엽록소함량(µmol/m2)_개화후2주',
     #  '유수길이(mm)_분얼전기', '엽록소함량(µmol/m2)_개화후4주', '군집(LAI)_개화기']
+    #-------drone데이터 포함
     X_cols = ['NDRE_분얼후기', '파종', 'CVI_개화기', 'CVI_분얼전기', '엽록소함량(µmol/m2)_개화기', 'GNDVI_분얼후기', 'CVI_개화후4주', 'RVI_분얼전기', 'NDVI_분얼전기', 'NDVI_개화기']
+   #-------생육조사결과만
+    X_cols = ['엽록소함량(µmol/m2)_개화기', '간장(cm)_개화후4주', '군집(LAI)_개화후4주', '군집(LAI)_개화후2주', '군집(LAI)_개화기', 'LAI_분얼전기', '관개',
+     '1수영화수_개화기', '엽록소함량(µmol/m2)_개화후2주', '수장(cm)_개화후2주']
+
     print(", ".join(X_cols))
     X_cols = plot_cols + X_cols
     X_cols = list(set(X_cols))
@@ -103,7 +108,7 @@ def main():
     predict_output_dir = '../output/predict'
     if not os.path.exists(predict_output_dir):
         os.mkdir(predict_output_dir)
-    feature_predict_figname = os.path.join(predict_output_dir, 'XGB_predict.png')
+    feature_predict_figname = os.path.join(predict_output_dir, 'XGBplant_predict.png')
 
     data_filename = '../output/iksan_10data.csv'
     df = pd.read_csv(data_filename)

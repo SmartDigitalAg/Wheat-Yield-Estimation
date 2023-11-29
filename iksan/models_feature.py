@@ -85,9 +85,10 @@ def main():
     # df = df[df['반복'] != '평균']
     df = df.drop(columns='반복')
     # df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25
-
-    draw_feature_importance(df, featurefig_output_dir, f'XGB')
-    draw_feature_importance(df, featurefig_output_dir, f'RF')
+    drop_columns = df.filter(like='NDRE').columns | df.filter(like='GNDVI').columns |df.filter(like='CVI').columns|df.filter(like='RVI').columns|df.filter(like='NDVI').columns
+    df = df.drop(columns=drop_columns)
+    draw_feature_importance(df, featurefig_output_dir, f'XGBplant')
+    draw_feature_importance(df, featurefig_output_dir, f'RFplant')
 
     # data_filename = '../output/iksan_data_drone.csv'
     # data_filename = '../output/iksan_data_all.csv'

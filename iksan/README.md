@@ -5,13 +5,13 @@
 * 총 80개의 데이터 사용
 * iksan_10data.csv
 
-1. RandomForest
+1.1 RandomForest-drone 포함
 
 * 변수중요도
 
 ![fig_RFimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/7b214652-acd8-4a55-ac38-0fead6b4d35d)
 
-* 예측 결과(top10)
+* 예측 결과(드론데이터 포함 top10)
 
 CVI_개화기, NDRE_분얼후기, NDRE_개화후2주, GNDVI_분얼후기, 엽록소함량(µmol/m2)_개화기, GNDVI_개화후2주, 군집(LAI)_개화기, CVI_개화후2주, 초장(cm)_분얼전기, CVI_분얼전기, 시비, 관개, 파종
 
@@ -19,10 +19,23 @@ MAE: 45.46, R2score: 0.52, RMSE: 54.24
 
 ![RF_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/1c3075a1-405f-46cf-8474-fa46a2f19f11)
 
+1.2 RandomForest-생육조사결과만
+* 변수중요도
 
-2. XGB
+![fig_RFplantimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/9dca217f-da28-4062-ad3e-750afaebdfe0)
+
+* 예측 결과(생육조사결과 top10 만)
+
+엽록소함량(µmol/m2)_개화기, 간장(cm)_개화후4주, 군집(LAI)_개화후4주, 군집(LAI)_개화후2주, 군집(LAI)_개화기, LAI_분얼전기, 관개, 1수영화수_개화기, 엽록소함량(µmol/m2)_개화후2주, 수장(cm)_개화후2주
+
+MAE: 57.22, R2score: 0.11, RMSE: 67.85
+
+![XGBplant_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/ba292f63-e39e-4359-9a17-57dc48f4ac47)
+
+2.1 XGB-drone 포함
 
 * 변수중요도
+
 ![fig_XGBimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/16472644-f3b3-487e-b17c-8593100057fb)
 
 * 예측 결과(top10)
@@ -40,6 +53,21 @@ NDRE_분얼후기, 파종, CVI_개화기, CVI_분얼전기, 엽록소함량(µmo
 MAE: 46.24, R2score: 0.44, RMSE: 55.86
 
 ![XGB_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/1ca9890e-a50e-4974-b383-7cfdd933cdcd)
+
+2.2 XGB-생육조사결과만
+
+*  변수중요도
+
+![fig_XGBplantimportance](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/60323cc7-d0e8-4861-88ff-cbe6cf1d84c7)
+
+
+* 예측결과(생육조사결과 top10, max_depth=2, n_estimators=50, learning_rate=0.1, early_stopping_rounds=200)
+
+엽록소함량(µmol/m2)_개화기, 군집(LAI)_개화기, 군집(LAI)_개화후2주, 간장(cm)_개화후4주, 수장(cm)_개화후4주, 초장(cm)_분얼전기, SPAD_분얼후기, LAI_분얼후기, 엽록소함량(µmol/m2)_개화후2주, 군집(LAI)_개화후4주
+
+MAE: 52.15, R2score: 0.04, RMSE: 65.56
+
+![XGBplant_predict](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/ba292f63-e39e-4359-9a17-57dc48f4ac47)
 
 
 #### 4차(드론 데이터 생체중/건조중 반복에 대해  LAI 등 조사결과 10반복 병합)
