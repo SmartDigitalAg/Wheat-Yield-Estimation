@@ -25,8 +25,8 @@ def draw_correlation(df, output_filename):
 
 
 def main():
-    data_filename = '../output/iksan_data_all.csv'
-    fig_output_dir = '../output/corr'
+    data_filename = 'output/iksan_data_all.csv'
+    fig_output_dir = 'output/corr'
     if not os.path.exists(fig_output_dir):
         os.mkdir(fig_output_dir)
 

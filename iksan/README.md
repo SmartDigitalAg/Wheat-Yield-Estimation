@@ -182,7 +182,7 @@ MAE: 95.69 , R2score: 0.74 , RMSE: 107.62
 ![RF변수중요도](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/433b9bd8-9a98-48c4-9658-b48e14aa6a0f)
 
 ```python
-data_filename = '../output/iksan_data_all.csv'
+data_filename = 'output/iksan_data_all.csv'
 df = pd.read_csv(data_filename)
 df = df[df['반복'] != '평균']
 df['종자_생체중_수확'] = df['종자_생체중_수확'] * 25
@@ -200,7 +200,7 @@ MAE: 84.02, R2score: 0.47, RMSE: 98.29
 ![XGB변수중요도](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/be202115-5a3a-42a2-b73e-4520892892b0)
 
 ```python
-    data_filename = '../output/iksan_data_all.csv'
+    data_filename = 'output/iksan_data_all.csv'
 df = pd.read_csv(data_filename)
 df = df[df['반복'] != '평균']
 df['종자_생체중_수확'] = df['종자_생체중_수확'] * 25

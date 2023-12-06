@@ -24,11 +24,11 @@ def evaluate_model(model, X_train, X_test, y_train, y_test):
     return mae, r2, y_predict
 
 def main():
-    predict_output_dir = '../output/predict'
+    predict_output_dir = 'output/predict'
     if not os.path.exists(predict_output_dir):
         os.mkdir(predict_output_dir)
 
-    data_filename = '../output/iksan_data_all.csv'
+    data_filename = 'output/iksan_data_all.csv'
     df = pd.read_csv(data_filename)
     df = df.dropna(axis=1)
     df = df[df['반복'] != '평균']

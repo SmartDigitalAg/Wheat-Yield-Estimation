@@ -234,7 +234,7 @@ def generate_data(filename):
 def main():
     filename = '../input/iksan/생육조사결과.xlsx'
 
-    output_dir = '../output'
+    output_dir = 'output'
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     output_filename = os.path.join(output_dir, 'iksan_data_all.csv')

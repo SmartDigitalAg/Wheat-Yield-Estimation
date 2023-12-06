@@ -76,10 +76,10 @@ def draw_feature_importance(df, featurefig_output_dir, model_name):
     print(list(reversed(top_10_features['Feature'].to_list())))
 
 def main():
-    featurefig_output_dir = '../output/feature'
+    featurefig_output_dir = 'output/feature'
     if not os.path.exists(featurefig_output_dir):
         os.mkdir(featurefig_output_dir)
-    filename = f'../output/iksan_10data.csv'
+    filename = f'output/iksan_10data.csv'
 
     df = pd.read_csv(filename)
     # df = df[df['반복'] != '평균']
