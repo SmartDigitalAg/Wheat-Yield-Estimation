@@ -4,6 +4,10 @@ import pandas as pd
 import tqdm
 
 warnings.simplefilter("ignore")
+input_dir = '../input'
+output_dir = '../output/report'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 def report_create_df(report_path, dir_name):
     dir_path = os.path.join(report_path, dir_name)
@@ -67,13 +71,10 @@ def report_summary_df(output_dir, site_info, report_path, list_condition):
 
 
 def main():
-    output_dir = "../output/report/"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
     report_path = r"Z:\Projects\2302_2306_wheat_report\report"
 
-    site_info = pd.read_excel("../input/맥류작황보고서_정보.xlsx")
+    site_info = pd.read_excel(os.path.join(input_dir, "맥류작황보고서_정보.xlsx"))
 
     list_condition = [
         ('지역', 'sum'),

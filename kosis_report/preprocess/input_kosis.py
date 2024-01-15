@@ -1,8 +1,19 @@
 import os
 import pandas as pd
 
+input_dir = '../../input'
+output_dir = '../../output'
+kosis_dir = os.path.join(output_dir, 'kosis')
+kosis_report_dir = os.path.join(output_dir,'kosis_report')
+weather_period_dir = os.path.join(kosis_report_dir, 'weather_period')
+weather_summary_dir = os.path.join(kosis_report_dir, 'weather_summary')
+
+model_input_dir = os.path.join(kosis_report_dir, 'model_input')
+if not os.path.exists(model_input_dir):
+    os.makedirs(model_input_dir)
+
 def merge_data(stn_Ids):
-    period_df = pd.read_csv(f"../output/weather/period_{stn_Ids}.csv")
+    period_df = pd.read_csv(os.path.join(weather_period_dir, f"period_{stn_Ids}.csv"))
 
     period_df['eff_tavg'] = period_df['tavg'].apply(lambda x: x - 5 if x >= 5 else 0)
     period_df['cumsum_tavg'] = period_df.groupby('season_year')['eff_tavg'].transform(pd.Series.cumsum)
@@ -24,13 +35,9 @@ def merge_data(stn_Ids):
     return df
 
 def main():
-    output_dir = "../output/input_kosis/"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    filenames = [x.strip(".csv") for x in os.listdir(kosis_dir) if x.endswith(".csv")]
 
-    filenames = [x.strip(".csv") for x in os.listdir("../output/kosis/") if x.endswith(".csv")]
-
-    code = pd.read_excel("../input/지점코드.xlsx")
+    code = pd.read_excel(os.path.join(input_dir, "지점코드.xlsx"))
 
     station = pd.DataFrame(filenames, columns=['지점명'])
     station['파일명'] = station['지점명']
@@ -47,8 +54,8 @@ def main():
         stn_Ids = row['지점코드']
 
         period = merge_data(stn_Ids)
-        summary = pd.read_csv(f"../output/weather/summary_{stn_Ids}.csv")
-        wheat = pd.read_csv(f'../output/kosis/{filename}.csv')
+        summary = pd.read_csv(os.path.join(weather_summary_dir, f"summary_{stn_Ids}.csv"))
+        wheat = pd.read_csv(os.path.join(kosis_dir, f'{filename}.csv' ))
 
         period['year'] = period['season_year']
         period = period.drop(columns = ['cumsum_tavg', 'season_year'])
@@ -60,13 +67,13 @@ def main():
         weather_wheat = pd.merge(wheat, weather, on='year', how='inner')
 
 
-        weather_wheat.to_csv(os.path.join(output_dir, f"{stn_Nm}_기상.csv"), index=False, encoding="utf-8-sig")
+        # weather_wheat.to_csv(os.path.join(model_input_dir, f"통계청_{stn_Nm}_기상.csv"), index=False, encoding="utf-8-sig")
 
         list_dfs.append(weather_wheat)
         files.append(filename)
 
     df_merge = pd.concat(list_dfs)
-    df_merge.to_csv(os.path.join(output_dir, "전국_기상.csv"), encoding="utf-8-sig", index=False)
+    df_merge.to_csv(os.path.join(model_input_dir, "통계청_전국_기상.csv"), encoding="utf-8-sig", index=False)
     print(set(filenames) - set(files))  # 기상데이터 없는 지역
 
 

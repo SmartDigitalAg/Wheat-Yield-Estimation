@@ -6,19 +6,22 @@ import json
 import requests
 from urllib.parse import quote_plus, urlencode
 
-def load_weather(stn_Ids):
+output_dir = './output'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+def load_weather(stn_Ids, sy, ey):
     '''
     교수님 API에서 한 파일로 기상데이터 불러옴
     지역마다 하나의 파일에 지정한 모든 연도의 기상데이터 담은 csv 파일 생성
     '''
-    cache_dir = "../output/cache_weather"
+    cache_dir = os.path.join(output_dir, "cache_weather")
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
     cache_filename = os.path.join(cache_dir, f"all_{stn_Ids}.csv")
     if not os.path.exists(cache_filename):
-        sy = 1967
-        ey = 2023
+
 
         URL = f"https://api.taegon.kr/stations/{stn_Ids}/?sy={sy}&ey={ey}&format=csv"
         df = pd.read_csv(URL, sep='\\s*,\\s*', engine="python")
@@ -28,12 +31,12 @@ def load_weather(stn_Ids):
     else:
         pass
 
-def load(stn_Ids):
+def load_kma(stn_Ids, sy, ey):
     '''
     공공데이터포털 API에서 연도별 기상데이터 불러옴
     지역마다, 연도마다의 csv 파일 생성
     '''
-    cache_dir = "../output/cache_weather"
+    cache_dir = os.path.join(output_dir, "cache_kma")
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
@@ -43,7 +46,7 @@ def load(stn_Ids):
                              'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132'
                              'Safari/537.36'}
 
-    for y in range(2007, 2023):
+    for y in range(sy, ey+1):
         cache_filename = os.path.join(cache_dir, f"{stn_Ids}_{y}.csv")
         if not os.path.exists(cache_filename):
             params = f'?{quote_plus("ServiceKey")}={servicekey}&' + urlencode({
@@ -87,14 +90,17 @@ def load(stn_Ids):
             pass
 
 def main():
-    info_df = pd.read_excel("../input/지점코드.xlsx")
+    sy = 1967 # 시작연도
+    ey = 2023 # 끝연도
 
-    for idx, row in info_df.iterrows():
+    # 전국 기상대
+    info_df = pd.read_excel("./input/지점코드.xlsx")
+
+    for idx, row in tqdm.tqdm(info_df.iterrows(), total=len(info_df)):
         try:
-            print(row['지점코드'], row['지점명'])
             stn_Ids = row['지점코드']
-            load_weather(stn_Ids)
-            load(stn_Ids)
+            load_weather(stn_Ids, sy, ey)  # 김태곤 교수님 기상 API
+            # load_kma(stn_Ids, sy, ey)      # 공공데이터포털 기상청 API
         except:
             print("error:", row['지점코드'], row['지점명'])
 

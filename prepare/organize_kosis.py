@@ -165,7 +165,7 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    data_dir = "../../input/kosis_wheat/"
+    data_dir = "../input/kosis_wheat/"
     file_list = os.listdir(data_dir)
 
     for filename in file_list:

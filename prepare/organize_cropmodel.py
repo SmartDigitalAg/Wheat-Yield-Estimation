@@ -1,14 +1,19 @@
 import pandas as pd
 import os
 
+input_dir = '../input'
+output_dir = '../output'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 def dssat_result(info):
-    data_dir = '../../input/dssat_results/'
-    filenames = [x for x in os.listdir(data_dir) if x.endswith(".OOV.txt")]
+    dssat_dir = os.path.join(input_dir, 'dssat_results')
+    filenames = [x for x in os.listdir(dssat_dir) if x.endswith(".OOV.txt")]
 
     station_info = {}
     for filename in filenames:
         crop_info = {}
-        with open(os.path.join(data_dir, filename), 'r') as file:
+        with open(os.path.join(dssat_dir, filename), 'r') as file:
             for line in file:
                 # ---- DSSAT results ----
                 if 'STARTING DATE' in line:
@@ -35,12 +40,12 @@ def dssat_result(info):
 
     return merged
 def aqua_result(info):
-    data_dir = '../../input/apsim_results/'
-    filenames = [x for x in os.listdir(data_dir) if x.endswith(".csv")]
+    apsim_dir = os.path.join(input_dir, 'apsim_results')
+    filenames = [x for x in os.listdir(apsim_dir) if x.endswith(".csv")]
 
     station_info = []
     for filename in filenames:
-        each = pd.read_csv(os.path.join(data_dir, filename))
+        each = pd.read_csv(os.path.join(apsim_dir, filename))
         each['year'] = each['Harvest Date (YYYY/MM/DD)']
         each = each[['year', 'Yield (tonne/ha)']]
         each_dict = each.to_dict('records')
@@ -63,12 +68,8 @@ def aqua_result(info):
     return merged
 
 def main():
-    output_dir = "../output/cropmodel/"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
     # ------------ 맥류작황보고서_정보
-    info = pd.read_excel('../input/맥류작황보고서_정보.xlsx')
+    info = pd.read_excel(os.path.join(input_dir, '맥류작황보고서_정보.xlsx'))
     info.drop('지역', axis=1, inplace=True)
 
     # ------------ crop model results merge

@@ -11,6 +11,14 @@ from xgboost import XGBRegressor
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
+output_dir = '../../output'
+kosis_report_dir = os.path.join(output_dir, 'kosis_report')
+model_input_dir = os.path.join(kosis_report_dir, 'model_input')
+model_result_dir = os.path.join(kosis_report_dir,'model_result')
+if not os.path.exists(model_result_dir):
+    os.makedirs(model_result_dir)
+
+
 def save_to_excel(file_name, data_frame):
     book = Workbook()
     sheet = book.active
@@ -26,11 +34,7 @@ def evaluate_model(model, X_train, X_test, y_train, y_test):
     return mae, r2, y_predict
 
 def main():
-    output_dir = "../output/model_result"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    df = pd.read_csv("../output/input_kosis/전국_기상.csv")
+    df = pd.read_csv(os.path.join(model_input_dir, "통계청_전국_기상.csv"))
 
     # df['rainfall_sum'] = df.filter(regex='rainfall').sum(axis='columns')
     # df['sunshine_sum'] = df.filter(regex='sunshine').sum(axis='columns')
@@ -70,7 +74,7 @@ def main():
     results_df = pd.DataFrame(results)
 
     # 결과를 엑셀 파일로 저장
-    save_to_excel(os.path.join(output_dir, "model_results_kosis.xlsx"), results_df)
+    save_to_excel(os.path.join(model_result_dir, "model_results_kosis.xlsx"), results_df)
 
 if __name__ == '__main__':
     main()

@@ -5,6 +5,7 @@ from matplotlib import font_manager, rc
 import altair as alt
 from datetime import datetime as dt, datetime
 import seaborn as sns
+import os
 
 font_path = "C:/Windows/Fonts/NGULIM.TTF"
 font = font_manager.FontProperties(fname=font_path).get_name()
@@ -61,7 +62,8 @@ def draw_scatter_plot(df):
     st.pyplot(fig)
 
 def main():
-    df = pd.read_csv("C:\code\Wheat-Yield-Estimation\output\input_kosis\전국_기상.csv")
+    data_dir = "C:\code\Wheat-Yield-Estimation\output\kosis_report\model_input"
+    df = pd.read_csv(os.path.join(data_dir, "통계청_전국_기상.csv"))
     draw_scatter_plot(df)
 
 if __name__ == '__main__':

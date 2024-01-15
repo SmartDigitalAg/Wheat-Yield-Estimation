@@ -1,25 +1,35 @@
 import pandas as pd
 import os
 import tqdm
+input_dir = '../../input'
+output_dir = '../../output'
+cache_weather = os.path.join(output_dir,'cache_weather')
+kosis_report_dir = os.path.join(output_dir,'kosis_report')
+if not os.path.exists(kosis_report_dir):
+    os.makedirs(kosis_report_dir)
+weather_period_dir = os.path.join(kosis_report_dir, 'weather_period')
+if not os.path.exists(weather_period_dir):
+    os.makedirs(weather_period_dir)
+weather_summary_dir = os.path.join(kosis_report_dir, 'weather_summary')
+if not os.path.exists(weather_summary_dir):
+    os.makedirs(weather_summary_dir)
 
-def weather_period(output_dir, stn_Ids, stn_Nm):
+def weather_period(stn_Ids, stn_Nm):
     '''
     불러온 기상데이터 재배기간을 고려해 정리
     '''
-    daily = pd.read_csv(f"../output/cache_weather/all_{stn_Ids}.csv")
+    daily = pd.read_csv(os.path.join(cache_weather,f"all_{stn_Ids}.csv"))
     daily["season_year"] = daily["year"]
     daily.loc[daily["month"] > 9, "season_year"] = daily["year"] + 1
     daily['station'] = stn_Nm
 
     df_period = daily[~daily["month"].isin([6, 7, 8, 9])].copy()
-    df_period.to_csv(os.path.join(output_dir, f"period_{stn_Ids}.csv"), index=False, encoding="utf-8-sig")
+    df_period.to_csv(os.path.join(weather_period_dir, f"period_{stn_Ids}.csv"), index=False, encoding="utf-8-sig")
 
 
-def weather_summary(output_dir, stn_Nm, stn_Ids, drop_col):
-    '''
+def weather_summary(stn_Nm, stn_Ids, drop_col):
 
-    '''
-    df = pd.read_csv(os.path.join(output_dir, f"period_{stn_Ids}.csv"))
+    df = pd.read_csv(os.path.join(weather_period_dir, f"period_{stn_Ids}.csv"))
 
     df['eff_tavg'] = df['tavg'].apply(lambda x: x - 5 if x >= 5 else 0)
 
@@ -71,26 +81,21 @@ def weather_summary(output_dir, stn_Nm, stn_Ids, drop_col):
 
     merged = pd.merge(df, cumsum, on = 'season_year', how='outer')
     merged['station'] = stn_Nm
-    merged.to_csv(os.path.join(output_dir, f"summary_{stn_Ids}.csv"), index=False, encoding="utf-8-sig")
+    merged.to_csv(os.path.join(weather_summary_dir, f"summary_{stn_Ids}.csv"), index=False, encoding="utf-8-sig")
 
     return merged
 
 def main():
-    output_dir = "../output/weather/"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    info_df = pd.read_excel("../input/지점코드.xlsx")
+    info_df = pd.read_excel(os.path.join(input_dir, "지점코드.xlsx"))
 
     drop_col = ['wind', 'sunshine', 'snow', 'humid', 'tmin', 'tmax']
 
-    for idx, row in info_df.iterrows():
-        print(row['지점코드'], row['지점명'])
+    for idx, row in tqdm.tqdm(info_df.iterrows(), total=len(info_df)):
         stn_Ids = row['지점코드']
         stn_Nm = row['지점명']
 
-        weather_period(output_dir, stn_Ids, stn_Nm)
-        weather_summary(output_dir, stn_Nm, stn_Ids, drop_col)
+        weather_period(stn_Ids, stn_Nm)
+        weather_summary(stn_Nm, stn_Ids, drop_col)
 
 
 if __name__ == '__main__':
