@@ -16,6 +16,13 @@ rc('font', family=font)
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 
+iksan_dir = "../output/iksan"
+
+predict_output_dir = os.path.join(iksan_dir, 'predict')
+if not os.path.exists(predict_output_dir):
+    os.mkdir(predict_output_dir)
+
+
 def evaluate_model(model, X_train, X_test, y_train, y_test):
     model.fit(X_train, y_train)
     y_predict = model.predict(X_test)
@@ -24,11 +31,9 @@ def evaluate_model(model, X_train, X_test, y_train, y_test):
     return mae, r2, y_predict
 
 def main():
-    predict_output_dir = 'output/predict'
-    if not os.path.exists(predict_output_dir):
-        os.mkdir(predict_output_dir)
 
-    data_filename = 'output/iksan_data_all.csv'
+
+    data_filename = os.path.join(iksan_dir, 'iksan_data_all.csv')
     df = pd.read_csv(data_filename)
     df = df.dropna(axis=1)
     df = df[df['반복'] != '평균']

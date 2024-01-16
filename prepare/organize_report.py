@@ -1,88 +1,86 @@
 import os
-import warnings
 import pandas as pd
-import tqdm
 
-warnings.simplefilter("ignore")
+report_path = r"Z:\Projects\2302_2306_wheat_report\check"
+
 input_dir = '../input'
-output_dir = '../output/report'
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+output_dir = '../output'
+report_dir = os.path.join(output_dir, 'report')
+if not os.path.exists(report_dir):
+    os.makedirs(report_dir)
+concated_dir = os.path.join(report_dir, 'concated')
+if not os.path.exists(concated_dir):
+    os.makedirs(concated_dir)
 
-def report_create_df(report_path, dir_name):
-    dir_path = os.path.join(report_path, dir_name)
-    filenames = os.listdir(dir_path)
 
-    df_all = pd.DataFrame()
-    for filename in filenames:
-        file_path = os.path.join(dir_path, filename)
-        df_each = pd.read_csv(f"{file_path}", encoding='cp949')
-        df_all = pd.concat([df_all, df_each])
-    df = df_all[(df_all['맥종'] == '밀') & (df_all['년도'] == '본년')]
-    df.drop(['맥종', '년도'], axis=1, inplace=True)
-    df.columns = [x.replace('\n ', '') for x in df.columns]
+def read_csv():
+    lst = []
+    dct = {}
+    for root_dir, dirs, files in os.walk(report_path):
 
-    return df
+        if root_dir != report_path:
+            basename = os.path.basename(root_dir)
+            save_path = os.path.join(concated_dir, f'{basename}.csv')
+            all_df = pd.DataFrame()
+            if not os.path.exists(save_path):
+                for file in files:
+                    df = pd.read_csv(os.path.join(root_dir, file), encoding='cp949')
+                    all_df = pd.concat([all_df, df], ignore_index=True)
+                all_df.columns = [col.strip().replace('\n', '').replace(' ', '') for col in all_df.columns]
+                all_df = all_df[(all_df['맥종'] == '밀') & (all_df['지역'].notna()) & (all_df['year'] != 2023)]
 
-def report_create_dict(dir_names, report_path):
-    dict_dfs = {}
+                if basename != 'method':
+                    all_df = all_df[all_df['년도'] == '본년']
+                    all_df = all_df.drop(columns=['년도'])
+                if basename == 'stage':
+                    all_df['year'] = all_df['year'] - 1
+                if basename == 'method':
+                    all_df = all_df[['맥종', '지역', '재배조건', '품종', '파종기', 'year',]]
 
-    for dir_name in tqdm.tqdm(dir_names):
-        try:
-            dict_dfs.update({dir_name: report_create_df(report_path, dir_name)})
-        except KeyError:
-            dict_dfs.update({dir_name: "KeyError"})  # method
+                all_df.to_csv(save_path, index=False)
+            else:
+                all_df = pd.read_csv(save_path)
+            dct[basename] = all_df
 
-    return dict_dfs
+            # for column in all_df.columns:
+            #     if all_df[column].apply(lambda x: '-' in str(x)).any():
+            #         lst.append(column)
 
-def report_merge(output_dir, site_info, report_path):
-    list_item = ["growth", "length", "yield", "fruitful",
-                 "method_1", "method_2", "method_3", "method_4",
-                 "method_5", "method_6", "method_7"]
+    # lst = [element for sublist in lst for element in sublist]
+    # print(list(set(lst)))
+    # '출현기', '파종기', '출수시', '출수기', '출수전', '최고분얼기', '생육재생기', '성숙기'
+    return dct
 
-    dir_names = os.listdir(report_path)
+def merged_dfs():
+    dct = read_csv()
+    common_col = ['맥종', '지역', '재배조건', '품종', 'year']
+    merged = pd.merge(dct['count'], dct['fruitful'], on=common_col, how='inner')
+    merged = pd.merge(merged, dct['growth'], on=common_col, how='inner')
+    merged = pd.merge(merged, dct['length'], on=common_col, how='inner')
+    # merged = pd.merge(merged, dct['method'], on=common_col, how='inner')
+    # merged = pd.merge(merged, dct['stage'], on=common_col, how='inner')
+    merged = pd.merge(merged, dct['yield'], on=common_col, how='inner')
+    merged.to_csv(os.path.join(report_dir, '맥류작황보고서.csv'), index=False)
+    return merged
 
-    dict_dfs = report_create_dict(dir_names, report_path)
+def report_summary_df(list_condition):
 
-    list_dfs = []
-    for item in list_item:
-        df = dict_dfs[f'{item}'].reset_index().drop('index', axis=1)
-        list_dfs.append(df)
-
-    df = pd.concat(list_dfs, axis=1, join='outer')
-    df = df.loc[:, ~df.columns.duplicated()].copy()
-    df = df[df['품종'] != '평균']
-
-    for idx, row in site_info.iterrows():
-        df.loc[df["지역"] == row['지역'], '지역'] = row['실제지역']
-
-    df['station'] = df['지역'].astype(str).apply(lambda x: x.split('(')[0])
-    df.to_csv(os.path.join(output_dir, "맥류작황보고서.csv"), index=False, encoding='utf-8-sig')
-
-    return df
-
-def report_summary_df(output_dir, site_info, report_path, list_condition):
-
-    df = report_merge(output_dir, site_info, report_path)
+    df = merged_dfs()
 
     for condition, func in list_condition:
         df_condition = df.pivot_table(index='year', columns=condition, values='완전종실중(kg/10a)', aggfunc=func)
-        df_condition.to_csv(os.path.join(output_dir, f"맥류작황보고서_{condition}별_생산량.csv"), encoding='utf-8-sig')
+        df_condition.to_csv(os.path.join(report_dir, f"맥류작황보고서_{condition}별_생산량.csv"), encoding='utf-8-sig')
+
 
 
 def main():
-
-    report_path = r"Z:\Projects\2302_2306_wheat_report\report"
-
-    site_info = pd.read_excel(os.path.join(input_dir, "맥류작황보고서_정보.xlsx"))
-
     list_condition = [
         ('지역', 'sum'),
         ('품종', 'sum'),
         ('재배조건', 'sum')]
+    report_summary_df(list_condition)
 
-    report_merge(output_dir, site_info, report_path)
-    report_summary_df(output_dir, site_info, report_path, list_condition)
+
 
 if __name__ == '__main__':
     main()

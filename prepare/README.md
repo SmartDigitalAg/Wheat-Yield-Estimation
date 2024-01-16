@@ -36,7 +36,7 @@ input > ```Z:\Projects\2302_2306_wheat_report\origin```
 
 output > ```Z:\Projects\2302_2306_wheat_report\report```
 
-맥류작황보고서 파일명에 연도 추가
+맥류작황보고서 파일명에 검색 연도 추가
 
 ---
 

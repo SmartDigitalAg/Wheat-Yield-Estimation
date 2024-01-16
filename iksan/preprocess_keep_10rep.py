@@ -2,6 +2,12 @@ import os
 import re
 import pandas as pd
 
+input_dir = '../input/iksan'
+output_dir = '../output'
+iksan_dir = os.path.join(output_dir, 'iksan')
+if not os.path.exists(iksan_dir):
+    os.makedirs(iksan_dir)
+
 def melted(df, value_name):
     df_melted = df.melt(id_vars='rep', var_name='조사지', value_name=value_name)
     return df_melted
@@ -232,16 +238,13 @@ def generate_data(filename):
     return df_all
 
 def main():
-    filename = '../input/iksan/생육조사결과.xlsx'
+    filename = os.path.join(input_dir, '생육조사결과.xlsx')
 
-    output_dir = 'output'
-    if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
-    output_filename = os.path.join(output_dir, 'iksan_data_all.csv')
+    output_filename = os.path.join(iksan_dir, 'iksan_data_all.csv')
 
     df_all = generate_data(filename)
     # print(df_all[['관개', '시비', '파종']])
-    df_all.to_csv(os.path.join(output_dir, 'iksan_data.csv'), index=False)
+    df_all.to_csv(os.path.join(iksan_dir, 'iksan_data.csv'), index=False)
     # df_all.to_csv(output_filename, index=False)
 
 if __name__ == '__main__':

@@ -21,6 +21,12 @@ from sklearn.model_selection import train_test_split, GridSearchCV, KFold
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
 
+iksan_dir = "../output/iksan"
+
+predict_output_dir = os.path.join(iksan_dir, 'predict')
+if not os.path.exists(predict_output_dir):
+    os.mkdir(predict_output_dir)
+
 def predict_yield(df, feature_predict_figname):
     y = df['drone_yield']
     # drop_columns = df.filter(like='생체중').columns | df.filter(like='건물중').columns | df.filter(like='수확').columns
@@ -105,12 +111,9 @@ def predict_yield(df, feature_predict_figname):
 
 
 def main():
-    predict_output_dir = 'output/predict'
-    if not os.path.exists(predict_output_dir):
-        os.mkdir(predict_output_dir)
     feature_predict_figname = os.path.join(predict_output_dir, 'XGBplant_predict.png')
 
-    data_filename = 'output/iksan_10data.csv'
+    data_filename = os.path.join(iksan_dir, 'iksan_10data.csv')
     df = pd.read_csv(data_filename)
     # df = df[df['반복'] != '평균']
     # df['종자_생체중_수확기'] = df['종자_생체중_수확기'] * 25

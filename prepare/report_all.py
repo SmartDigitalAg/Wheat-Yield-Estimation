@@ -17,7 +17,7 @@ class ReportInfo:
 def preprocess(folders_path, report):
     folder_name = os.path.join(folders_path, rf"origin\{report.dir_name}")
 
-    output_dir = os.path.join(folders_path, rf"report\{report.dir_name}")
+    output_dir = os.path.join(folders_path, rf"check\{report.dir_name}")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -34,6 +34,16 @@ def preprocess(folders_path, report):
             df.columns = report.columns
         df = df.drop(df.index[0:report.skip_row])
         df['year'] = year
+        if report.item_name != '재배법':
+            df = df[(df['년도'] != '평년대비') &  (df['년도'] != '평년')]
+
+        if report.item_name == '생육시기':
+            date_cols = ['출현기', '생육재생기', '최고분얼기', '출수기', '성숙기']
+            df[date_cols] = df[date_cols].apply(pd.to_datetime)
+
+
+        else:
+            df = df
         if df.empty:
             empty_list.append(year)
         else:

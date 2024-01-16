@@ -12,6 +12,11 @@ rc('font', family=font)
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 
+iksan_dir = "../output/iksan"
+
+fig_output_dir = os.path.join(iksan_dir, 'corr')
+if not os.path.exists(fig_output_dir):
+    os.mkdir(fig_output_dir)
 
 
 def draw_correlation(df, output_filename):
@@ -25,11 +30,7 @@ def draw_correlation(df, output_filename):
 
 
 def main():
-    data_filename = 'output/iksan_data_all.csv'
-    fig_output_dir = 'output/corr'
-    if not os.path.exists(fig_output_dir):
-        os.mkdir(fig_output_dir)
-
+    data_filename = os.path.join(iksan_dir, 'iksan_data_all.csv')
     df = pd.read_csv(data_filename)
     df['종자_생체중_수확'] = df['종자_생체중_수확'] * 25
 

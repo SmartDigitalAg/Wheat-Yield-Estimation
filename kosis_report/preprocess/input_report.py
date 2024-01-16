@@ -29,6 +29,7 @@ def main():
     info_df = pd.read_excel(os.path.join(input_dir, "맥류작황보고서_정보.xlsx")).head(14)
 
     report = pd.read_csv(os.path.join(output_dir, "report", "맥류작황보고서.csv"))
+    report['station'] = report['지역'].apply(lambda x: x.split('(')[0])
     cropmodel = pd.read_csv(os.path.join(output_dir, "작물모델결과.csv"))
     weather_summary = merge_summary(info_df)
 

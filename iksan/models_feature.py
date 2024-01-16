@@ -18,6 +18,11 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 
+iksan_dir = "../output/iksan"
+
+featurefig_output_dir = os.path.join(iksan_dir, 'feature')
+if not os.path.exists(featurefig_output_dir):
+    os.mkdir(featurefig_output_dir)
 
 def draw_feature_importance(df, featurefig_output_dir, model_name):
     feature_importance_figname = os.path.join(featurefig_output_dir, f'fig_{model_name}importance.png')
@@ -76,10 +81,7 @@ def draw_feature_importance(df, featurefig_output_dir, model_name):
     print(list(reversed(top_10_features['Feature'].to_list())))
 
 def main():
-    featurefig_output_dir = 'output/feature'
-    if not os.path.exists(featurefig_output_dir):
-        os.mkdir(featurefig_output_dir)
-    filename = f'output/iksan_10data.csv'
+    filename = os.path.join(iksan_dir, f'iksan_10data.csv')
 
     df = pd.read_csv(filename)
     # df = df[df['반복'] != '평균']
