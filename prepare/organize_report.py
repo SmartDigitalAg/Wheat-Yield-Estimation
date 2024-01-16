@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-report_path = r"Z:\Projects\2302_2306_wheat_report\check"
+report_path = r"Z:\Projects\2302_2306_wheat_report\report"
 
 input_dir = '../input'
 output_dir = '../output'
@@ -22,20 +22,25 @@ def read_csv():
             basename = os.path.basename(root_dir)
             save_path = os.path.join(concated_dir, f'{basename}.csv')
             all_df = pd.DataFrame()
-            if not os.path.exists(save_path):
+            if os.path.exists(save_path):
                 for file in files:
                     df = pd.read_csv(os.path.join(root_dir, file), encoding='cp949')
                     all_df = pd.concat([all_df, df], ignore_index=True)
                 all_df.columns = [col.strip().replace('\n', '').replace(' ', '') for col in all_df.columns]
                 all_df = all_df[(all_df['맥종'] == '밀') & (all_df['지역'].notna()) & (all_df['year'] != 2023)]
 
-                if basename != 'method':
-                    all_df = all_df[all_df['년도'] == '본년']
-                    all_df = all_df.drop(columns=['년도'])
                 if basename == 'stage':
+                    common_col = ['맥종', '지역', '재배조건', '품종', 'year']
                     all_df['year'] = all_df['year'] - 1
-                if basename == 'method':
+                    c_df = all_df[all_df['년도'] == '본년'].drop(columns=['출현기'])
+                    p_df = all_df[all_df['년도'] == '전년'][common_col + ['출현기']]
+                    all_df = pd.merge(c_df, p_df, on=common_col, how='inner')
+
+                elif basename == 'method':
                     all_df = all_df[['맥종', '지역', '재배조건', '품종', '파종기', 'year',]]
+                else:
+                    all_df = all_df[(all_df['년도'] == '본년')]
+                    all_df = all_df.drop(columns=['년도'])
 
                 all_df.to_csv(save_path, index=False)
             else:

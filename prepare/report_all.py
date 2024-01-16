@@ -17,7 +17,7 @@ class ReportInfo:
 def preprocess(folders_path, report):
     folder_name = os.path.join(folders_path, rf"origin\{report.dir_name}")
 
-    output_dir = os.path.join(folders_path, rf"check\{report.dir_name}")
+    output_dir = os.path.join(folders_path, rf"report\{report.dir_name}")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
