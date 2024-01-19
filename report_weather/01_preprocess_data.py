@@ -71,6 +71,12 @@ def preprocess_report(station_list):
     return merged
 
 
+def report_summary_df(result, list_condition):
+
+
+    for condition, func in list_condition:
+        df_condition = result.pivot_table(index='year', columns=condition, values='완전종실중(kg/10a)', aggfunc=func)
+        df_condition.to_csv(os.path.join(report_weather_dir, f"맥류작황보고서_{condition}별_생산량.csv"), encoding='utf-8-sig')
 
 def main():
 
@@ -81,13 +87,21 @@ def main():
 
     report_df = pd.read_csv(os.path.join(report_dir, '맥류작황보고서.csv'))
     # 이삭수, 이삭당립수, 천립중 > '맥종', '지역', '재배조건', '품종', '1,000립중(g)', '수수(개/m2)', '결실립수(개)', 'year'
-    report_df = report_df[['맥종', '지역', '재배조건', '품종', '1,000립중(g)', '수수(개/m2)', '결실립수(개)', 'year']]
+    # report_df = report_df[['맥종', '지역', '재배조건', '품종', '1,000립중(g)', '수수(개/m2)', '결실립수(개)', 'year']]
 
     summary_weather = preprocess_weather(station_code_dict)
     # preprocess_report(station_list)
     # merge_datas()
     result = pd.merge(summary_weather, report_df, on=['year', '지역'], how='inner') # 기상대가 설치되지 않았던 해는 null 값
-    result.to_csv(os.path.join(report_weather_dir, '맥류작황보고서_기상요인분석.csv'), index=False)
+    result.to_csv(os.path.join(report_weather_dir, '맥류작황보고서_기상요인.csv'), index=False)
+
+
+    list_condition = [
+        ('지역', 'mean'),
+        ('품종', 'mean'),
+        ('재배조건', 'mean')]
+
+    report_summary_df(result, list_condition)
 
 if __name__ == '__main__':
     main()
