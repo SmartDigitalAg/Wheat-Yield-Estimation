@@ -11,7 +11,13 @@ if not os.path.exists(report_dir):
 concated_dir = os.path.join(report_dir, 'concated')
 if not os.path.exists(concated_dir):
     os.makedirs(concated_dir)
+anova_dir = os.path.join(report_dir, 'anova')
+if not os.path.exists(anova_dir):
+    os.makedirs(anova_dir)
 
+report_weather_dir = os.path.join(report_dir, 'report_weather')
+if not os.path.exists(report_weather_dir):
+    os.makedirs(report_weather_dir)
 
 def read_csv():
     lst = []
@@ -76,14 +82,30 @@ def report_summary_df(list_condition):
         df_condition = df.pivot_table(index='year', columns=condition, values='완전종실중(kg/10a)', aggfunc=func)
         df_condition.to_csv(os.path.join(report_dir, f"맥류작황보고서_{condition}별_생산량.csv"), encoding='utf-8-sig')
 
+def report_r(df):
+    '''
+    R 통계분석 위한 데이터 생성
+    '''
+    
+    # 완전종실중과 품종
+    type = df[['완전종실중(kg/10a)', '품종']]
+    type.columns = ['yield', 'type']
+    dct = {type: f'type{idx+1}' for idx, type in enumerate(type['type'].unique())}
+    type['type'] = type['type'].apply(lambda x: dct[x])
+    type.to_csv(os.path.join(anova_dir, f"맥류작황보고서_품종.csv"), index=False, encoding='utf-8-sig')
+
+    #
 
 
 def main():
     list_condition = [
-        ('지역', 'sum'),
-        ('품종', 'sum'),
-        ('재배조건', 'sum')]
+        ('지역', 'mean'),
+        ('품종', 'mean'),
+        ('재배조건', 'mean')]
     report_summary_df(list_condition)
+
+    df = pd.read_csv(os.path.join(report_dir, '맥류작황보고서.csv'))
+    report_r(df)
 
 
 
