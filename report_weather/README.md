@@ -2,10 +2,13 @@
 
 [01_preprocess_data.py](./01_preprocess_data.py)
 
-input > ```../input/맥류작황보고서.xlsx```, ```../output/report/맥류작황보고서.csv```
+want > re = 재정리, origin = 원본 (line 11)
 
-output > ```../output/report_weather/맥류작황보고서_기상요인분석.csv```
+input > ```../input/맥류작황보고서.xlsx```, ```../output/report/{want}_datas맥류작황보고서.csv```
 
+output > ```../output/report_weather/{want}/*.csv```
+
+작황데이터 + 기상요인과 이 데이터에서 재배조건별/지역별/품종별 생산량과 기초통계량 생성
 
 - winter_temp: 파종~월동 전 온도 > 10월 ~ 2월 중순 => season_year를 기준으로
 - vegetative_temp: 월동 후 영양생장기 온도 > 2월 하순 ~ 3월 중순
@@ -18,11 +21,12 @@ output > ```../output/report_weather/맥류작황보고서_기상요인분석.cs
 
 input > ```../output/report_weather/맥류작황보고서_기상요인분석.csv```
 
-![수수](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/b7ee8ac5-8668-4df9-9713-59f1e60fa7e6)
-![결십립수](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/1d211a19-2e77-43b7-bd2e-eea8f55f9fdf)
-![천립중](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/4aa75ed7-84c7-4c8a-9601-52f1aa98bd58)
+![그림2](https://github.com/SmartDigitalAg/Wheat-Yield-Estimation/assets/93760723/5d8268f3-f532-43de-a8c7-61f2c365f68e)
 
 
+[03_app.py](./03_app.py)
+
+input > 
 
 -------
 

@@ -40,10 +40,19 @@ output > ```Z:\Projects\2302_2306_wheat_report\report```
 
 ---
 
-[organize_report.py](organize_report.py)
+[report_organize.py](report_organize.py)
 
-input > ```Z:\Projects\2302_2306_wheat_report\report``` & ```../input/지점코드.xlsx```
+input > ```Z:\Projects\2302_2306_wheat_report\report```
 
-output > ```../output/report```
+output > ```../output/report/origin_concated, origin_datas ```
 
-맥류작황보고서 하나의 파일로 정리 & 재배조건별/지역별/품종별 생산량 파일 생성
+검색년도 기준으로 맥류작황보고서 하나의 파일로 정리 & 재배조건별/지역별/품종별 생산량 파일 생성
+
+---
+[report_reorganize.py](report_reorganize.py)
+
+input > ```Z:\Projects\2302_2306_wheat_report\report```
+
+output > ```../output/report/re_concated, re_datas ```
+
+생육시기 기준으로 맥류작황보고서 하나의 파일로 정리 & 재배조건별/지역별/품종별 생산량 파일 생성
