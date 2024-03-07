@@ -1,3 +1,6 @@
 .idea
 output
 report_weather/wheat_report
+kosis/두류생산량_원본
+kosis/두류생산량_전처리
+kosis_api
