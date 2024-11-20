@@ -14,7 +14,6 @@
 4. [prepare/report_reorganize.py](prepare/report_reorganize.py)
 5. [report_weather/01_preprocess_data.py](report_weather/01_preprocess_data.py)
 6. [report_weather/03_app.py](report_weather/03_app.py)
-
 ---
 
 ```iksan``` > 2023.11 익산 데이터
@@ -27,3 +26,7 @@
 ---
 
 ```kosis``` > 2024.03 두류/미곡/맥류 생산량 모의 통계청 자료
+
+---
+
+```drone_yield``` > 2024.11 드론 식생지수와 생육지표 상관관계 분석(2024동계농림기상학회)

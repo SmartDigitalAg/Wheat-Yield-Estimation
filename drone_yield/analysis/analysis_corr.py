@@ -1,13 +1,14 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from matplotlib import rc  ### 이 줄과
-rc('font', family='AppleGothic') 			## 이 두 줄을
-plt.rcParams['axes.unicode_minus'] = False  ## 추가해줍니다.
-
+from matplotlib import rc
+# rc('font', family='AppleGothic')
+# plt.rcParams['axes.unicode_minus'] = False
+plt.rc('font', family='HANDotumExt')
+plt.rcParams['axes.unicode_minus'] = False
 
 def main():
-    df = pd.read_csv('./output/2324_growth.csv')
+    df = pd.read_csv('../output/2324_growth.csv')
     # df = df[df['ID'] <= 10]
     # print(df.columns)
     for stage in df['생육단계'].unique():
