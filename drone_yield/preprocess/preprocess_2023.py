@@ -128,10 +128,12 @@ def final_preprocess(df):
     df = df.dropna(subset=['반복'])
     df['조사지'] = df['조사지'].str.replace('Plot', '').str.strip().astype(int)
     df = df.sort_values(['조사지', '반복']).reset_index(drop=True)
+    # print(df)
+
     df = df.reset_index().rename(columns={'index': 'ID'})
     df['ID'] = df['ID'] + 1
 
-    df = df.drop(columns=['조사지', '반복'])
+    df = df.drop(columns=['반복'])
     value_vars = [col for col in df.columns if 'ID' not in col]
     df_melted = pd.melt(df, id_vars=['ID'], value_vars=value_vars,
                         var_name='지표_생육단계', value_name='value')
@@ -233,8 +235,13 @@ def main():
     drone_df = pd.read_excel(drone_filename)
     drone_df = prerpocess_drone(drone_df)
 
-    merged = pd.merge(growth_df, drone_df, on=['ID', '생육단계'], how='inner')
-    merged.to_csv("../output/2023_growth.csv", index=False, encoding='utf-8-sig')
+    growth_df.to_csv(os.path.join(output_dir, '2023_growth.csv'), index=False, encoding='utf-8-sig')
+    drone_df.to_csv(os.path.join(output_dir, '2023_drone.csv'), index=False, encoding='utf-8-sig')
+
+    # print(growth_df.columns)
+
+    # merged = pd.merge(growth_df, drone_df, on=['ID', '생육단계'], how='inner')
+    # merged.to_csv("../output/2023_growth.csv", index=False, encoding='utf-8-sig')
 
     # print(df_all[['관개', '시비', '파종']])
     # df_all.to_csv(output_filename, index=False, encoding='utf-8-sig')

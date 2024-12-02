@@ -144,6 +144,7 @@ def prerpocess_drone(df):
 def main():
     data_dir = '../input/2024'
     growth_filename = '../input/2024/2024_생육조사결과(최종본).xlsx'
+    output_dir= '../output'
     drone_df = concat_vegetation_indices(data_dir)
     drone_df = prerpocess_drone(drone_df)
     datas = pd.read_excel(growth_filename, sheet_name=None)
@@ -165,8 +166,11 @@ def main():
 
             growth_df = pd.concat([growth_df, result], axis=0)
 
-    merged = pd.merge(growth_df, drone_df, on=['ID', '생육단계'], how='inner')
-    merged.to_csv("../output/2024_growth.csv", index=False, encoding='utf-8-sig')
+    growth_df.to_csv(os.path.join(output_dir, '2024_growth.csv'), index=False, encoding='utf-8-sig')
+    drone_df = drone_df[drone_df['ID'] != 0]
+    drone_df.to_csv(os.path.join(output_dir, '2024_drone.csv'), index=False, encoding='utf-8-sig')
+    # merged = pd.merge(growth_df, drone_df, on=['ID', '생육단계'], how='inner')
+    # merged.to_csv("../output/2024_growth.csv", index=False, encoding='utf-8-sig')
 
 
 if __name__ == '__main__':
