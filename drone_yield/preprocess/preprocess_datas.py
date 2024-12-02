@@ -47,7 +47,8 @@ drone_24 = pd.read_csv(os.path.join(input_dir, "2024_drone.csv"))
 growth_24 = pd.read_csv(os.path.join(input_dir, "2024_growth.csv"))
 drone_23 = pd.read_csv(os.path.join(input_dir, "2023_drone.csv"))
 growth_23 = pd.read_csv(os.path.join(input_dir, "2023_growth.csv"))
-
+drone_23['CVI'] = drone_23['CVI'] * 10
+drone_24['CVI'] = drone_24['CVI'] / 100
 growth_24 = mean_data(growth_24, '생육', 2024)
 drone_24 = mean_data(drone_24, '드론', 2024)
 
@@ -56,6 +57,8 @@ df_24 = pd.merge(growth_24, drone_24, on=['plot', 'year', '생육단계'], how='
 
 growth_23 = mean_data(growth_23, '생육', 2023)
 drone_23 = mean_data(drone_23, '드론', 2023)
+
+
 df_23 = pd.merge(growth_23, drone_23, on=['plot', 'year', '생육단계'], how='inner')
 df = pd.concat([df_24, df_23])
 df['생육단계'] = df['생육단계'].apply(lambda x: '수확기' if x == '수확' else x)
