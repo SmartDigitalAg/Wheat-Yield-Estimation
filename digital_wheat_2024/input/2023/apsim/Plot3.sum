@@ -1,0 +1,366 @@
+     ###     ######     #####   #   #     #   
+    #   #    #     #   #        #   ##   ##   
+   #     #   #     #   #        #   ##   ##   
+   #######   ######     #####   #   # # # #   
+   #     #   #              #   #   #  #  #   
+   #     #   #         #####    #   #  #  #   
+                                              
+                                              
+ The Agricultural Production Systems Simulator
+             Copyright(c) APSRU               
+
+Version                = 7.10 r4218
+Title                  = Plot3
+   Component                        "clock" = %apsim%\Model\Clock.dll
+   Component                          "met" = %apsim%\Model\Input.dll
+Paddock:
+   Component                   "outputfile" = %apsim%\Model\Report.dll
+   Component                        "accum" = %apsim%\Model\Accum.dll
+   Component                   "fertiliser" = %apsim%\Model\Fertiliser.dll
+   Component                         "Area" = %apsim%\Model\Manager.dll
+   Component          "Sow on a fixed date" = %apsim%\Model\Manager.dll
+   Component              "Harvesting rule" = %apsim%\Model\Manager.dll
+   Component "Silty Clay Loam over Light Clay (Goonumbla 1 No1194) Water" = %apsim%\Model\SoilWat.dll
+   Component         "SurfaceOrganicMatter" = %apsim%\Model\SurfaceOM.dll
+   Component "Silty Clay Loam over Light Clay (Goonumbla 1 No1194) Nitrogen" = %apsim%\Model\SoilN.dll
+   Component                           "Cl" = %apsim%\Model\Solute.dll
+   Component                        "wheat" = %apsim%\Model\Plant.dll
+   Component              "Crop Management" = %apsim%\Model\Manager2.dll
+   Component        "FertiliseOnFixedDates" = %apsim%\Model\Manager2.dll
+
+------- clock Initialisation --------------------------------------------------
+     Sequencer phases:
+        prepare
+        init_step
+        do_management
+        run_one_step
+        do_pasture_water
+        process
+        do_pasture_growth
+        do_stock
+        do_cashbook
+        post
+        end_step
+     Simulation start date =  4/11/2022
+     Simulation end date   = 15/06/2023
+     Time step =           = 1440 (mins)
+
+------- met Initialisation ----------------------------------------------------
+     Sparse data is not allowed
+     INPUT File name: C:\code\2024_APSIM\phenology_yield\output\preprocess_weather\each\weather_met\146.met
+
+------- outputfile Initialisation ---------------------------------------------
+     Output frequency:
+        harvesting
+        end_simulation
+     Output variables:
+        dd/mm/yyyy as Date
+        biomass
+        yield
+        grain_protein
+        grain_size
+        esw
+        lai
+        grain_protein
+        sws
+        sw_stress_expan
+        sw_stress_fixation
+        sw_stress_pheno
+        sw_stress_photo
+        n_stress_pheno
+        n_stress_expan
+        n_stress_grain
+        n_stress_photo
+        temp_stress_photo_co2
+        temp_stress_photo
+        esw
+        eo
+        es
+        eos
+        TTAfterflowering
+        TTAftergermination
+        TTAfterharvest_ripe
+        TTAftermaturity
+        n_uptake
+        sw_stress_expan
+
+     Output file = Plot3.out
+     Format = normal
+
+------- paddock.accum Initialisation ------------------------------------------
+     Initialising
+
+------- paddock.Area Initialisation -------------------------------------------
+     Manager rules:
+     
+     SECTION:- init
+     area = 0.17
+     END of rules
+     
+     Manager creating a new local real variable : area = 0.17000
+
+------- paddock.Sow on a fixed date Initialisation ----------------------------
+     Manager rules:
+     
+     SECTION:- start_of_day
+             if (today = date('1-aug') then
+       wheat sow plants =85, sowing_depth = 25, cultivar = saegeumgang, row_spacing = 80, crop_class = plant
+              endif
+     END of rules
+     
+
+------- paddock.Harvesting rule Initialisation --------------------------------
+     Manager rules:
+     
+     SECTION:- end_of_day
+                if (wheat.stagename = 'harvest_ripe' or wheat.plant_status = 'dead')  then
+       wheat  harvest
+       wheat  end_crop
+                endif
+     END of rules
+     
+
+------- paddock.Silty Clay Loam over Light Clay (Goonumbla 1 No1194) Water Initialisation      
+         - Reading constants
+     
+        - Reading Soil Property Parameters
+     
+        - Reading Soil Profile Parameters
+     Initial soilwater distributed using "sw" parameter.
+     
+     
+     
+                      Soil Profile Properties
+        ---------------------------------------------------------------------
+              Depth  Air_Dry  LL15   Dul    Sat     Sw     BD   Runoff  SWCON
+                mm     mm/mm  mm/mm  mm/mm  mm/mm  mm/mm  g/cc    wf
+        ---------------------------------------------------------------------
+            0.-  100.  0.052  0.105  0.271  0.376  0.271  1.364  0.613  0.500
+          100.-  200.  0.084  0.105  0.271  0.376  0.271  1.521  0.243  0.300
+          200.-  300.  0.123  0.123  0.276  0.394  0.276  1.475  0.096  0.300
+          300.-  500.  0.123  0.123  0.318  0.420  0.318  1.406  0.048  0.300
+          500.-  700.  0.123  0.123  0.371  0.434  0.371  1.368  0.000  0.300
+          700.-  900.  0.123  0.123  0.349  0.387  0.349  1.492  0.000  0.300
+        ---------------------------------------------------------------------
+     
+     
+     
+                  Soil Water Holding Capacity
+          ---------------------------------------------------------
+              Depth    Unavailable Available  Max Avail.  Drainable
+                          (LL15)   (SW-LL15)  (DUL-LL15)  (SAT-DUL)
+                            mm        mm          mm         mm
+          ---------------------------------------------------------
+            0.-  100.      10.50      16.60      16.60      10.50
+          100.-  200.      10.50      16.60      16.60      10.50
+          200.-  300.      12.30      15.30      15.30      11.80
+          300.-  500.      24.60      39.00      39.00      20.40
+          500.-  700.      24.60      49.60      49.60      12.60
+          700.-  900.      24.60      45.20      45.20       7.60
+          ---------------------------------------------------------
+               Totals     107.10     182.30     182.30      73.40
+          ---------------------------------------------------------
+     
+     
+     
+     
+     
+     
+                  Initial Soil Parameters
+          ---------------------------------------------------------
+                 Insoil        Salb     Dif_Con   Dif_Slope
+          ---------------------------------------------------------
+                   0.00        0.13       88.00       35.00
+          ---------------------------------------------------------
+     
+     
+     
+                  Runoff is predicted using scs curve number:
+                Cn2  Cn_Red  Cn_Cov   H_Eff_Depth
+                                           mm
+          ---------------------------------------------------------
+              73.00   20.00    0.80  450.00
+          ---------------------------------------------------------
+     
+     
+     
+           Using Ritchie evaporation model
+            Stage 1 Duration (U): Summer        6.00 (mm)
+                                  Winter        2.00 (mm)
+            Stage 2       (CONA): Summer        3.50 (mm^0.5)
+                                  Winter        2.00 (mm^0.5)
+            Critical Dates:       Summer        1-Jun
+                                  Winter        1-Nov
+            Eo from priestly-taylor
+
+------- paddock.SurfaceOrganicMatter Initialisation ---------------------------
+     
+         - Reading constants
+     
+         - Reading parameters
+     
+     
+     
+                         Initial Surface Organic Matter Data
+         ----------------------------------------------------------------------
+            Name   Type        Dry matter   C        N        P    Cover  Standing_fr
+                                (kg/ha)  (kg/ha)  (kg/ha)  (kg/ha) (0-1)     (0-1)
+         ----------------------------------------------------------------------
+          wheat     rice             0.0     0.0     0.0     0.0   0.000     0.0
+         ----------------------------------------------------------------------
+     
+                      Effective Cover from Surface Materials =   0.0
+     
+
+------- paddock.Silty Clay Loam over Light Clay (Goonumbla 1 No1194) Nitrogen Initialisation      
+        - Reading Parameters
+     
+        - Reading Constants
+     Using standard soil mineralisation for soil type Red Silty Clay Loam over Red Light Clay
+     
+     
+     
+           TAV and AMP supplied externally
+     
+     
+     
+                      Soil Profile Properties
+          ------------------------------------------------
+           Layer    pH    OC     NO3     NH4    Urea
+                         (%) (kg/ha) (kg/ha) (kg/ha)
+          ------------------------------------------------
+             1     6.03  1.38    2.75    0.25    0.00
+             2     5.77  0.66    3.54    0.10    0.00
+             3     6.29  0.66    2.80    0.17    0.00
+             4     6.54  0.69    5.86    0.35    0.00
+             5     6.72  0.34    6.07    0.35    0.00
+             6     6.98  0.21    6.35    0.38    0.00
+          ------------------------------------------------
+           Totals               27.38    1.60    0.00
+          ------------------------------------------------
+     
+     
+     
+     
+     
+     
+                  Initial Soil Organic Matter Status
+          ---------------------------------------------------------
+           Layer      Hum-C   Hum-N  Biom-C  Biom-N   FOM-C   FOM-N
+                    (kg/ha) (kg/ha) (kg/ha) (kg/ha) (kg/ha) (kg/ha)
+          ---------------------------------------------------------
+             1      18441.3  1536.8   381.9    47.7   148.2     3.7
+             2       9880.3   823.4   158.3    19.8   106.2     2.7
+             3       9639.6   803.3    95.4    11.9    76.1     1.9
+             4      19316.8  1609.7    86.0    10.8    39.1     1.0
+             5       9432.2   786.0     7.0     0.9    20.1     0.5
+             6       6172.3   514.4     4.6     0.6    10.3     0.3
+          ---------------------------------------------------------
+           Totals   72882.4  6073.5   733.3    91.7   400.0    10.0
+          ---------------------------------------------------------
+
+------- paddock.Cl Initialisation ---------------------------------------------
+     Initialising
+     
+        - Reading Constants
+
+------- Crop Management Initialisation ----------------------------------------
+
+------- FertiliseOnFixedDates Initialisation ----------------------------------
+------- Start of simulation  --------------------------------------------------
+15-11-2022 Sowing Crop
+15 November 2022(Day of year=319), paddock.wheat: 
+     Crop Sow
+        ------------------------------------------------
+        cultivar                   = saegeumgang
+        Phases:
+           out
+           sowing
+           germination
+           emergence
+           end_of_juvenile
+           floral_initiation
+           flowering
+              tt_flowering               =     120 (dd)
+           start_grain_fill
+              tt_start_grain_fill        =     400 (dd)
+           end_grain_fill
+              tt_end_grain_fill          =     300 (dd)
+           maturity
+              tt_maturity                =       1 (dd)
+           harvest_ripe
+              tt_harvest_ripe            =    1000 (dd)
+           end_crop
+              tt_end_crop                =    1000 (dd)
+     
+        grains_per_gram_stem           =       21.4 (/g)
+        potential_grain_filling_rate   =     0.0400 (g/grain/day)
+        potential_grain_growth_rate    =     0.0012 (g/grain/day)
+        max_grain_size                 =     0.0500 (g)
+        ------------------------------------------------
+     
+     
+                        Root Profile
+         -----------------------------------------------
+          Layer       Kl           Lower    Exploration
+          Depth     Factor         Limit      Factor
+          (mm)         ()        (mm/mm)       (0-1)
+         -----------------------------------------------
+         100.0     0.060          0.105       1.000
+         100.0     0.060          0.105       1.000
+         100.0     0.060          0.123       1.000
+         200.0     0.060          0.167       1.000
+         200.0     0.040          0.237       1.000
+         200.0     0.040          0.244       1.000
+         -----------------------------------------------
+         Extractable SW:   127mm in   900mm total depth ( 14%).
+         Crop factor for bounding water use is set to   1.5 times eo.
+      stage 1.0 sowing
+     
+                      Crop Sowing Data
+         ------------------------------------------------
+         Sowing  Depth Plants Spacing Skip  Skip  Cultivar
+         Day no   mm     m^2     mm   row   plant name
+         ------------------------------------------------
+            319   25.0  250.0  200.0   0.0   0.0 saegeumgang
+         ------------------------------------------------
+     
+16 November 2022(Day of year=320), paddock.wheat: 
+      stage 2.0 germination
+22 November 2022(Day of year=326), paddock.wheat: 
+      stage 3.0 emergence
+                     biomass =           1.15 (g/m^2)   lai          =   0.050 (m^2/m^2)
+                     stover N conc =     5.85 (%)    extractable sw =   32.60 (mm)
+19 March 2023(Day of year=78), paddock.wheat: 
+      stage 4.0 end_of_juvenile
+                     biomass =          55.98 (g/m^2)   lai          =   0.965 (m^2/m^2)
+                     stover N conc =     2.73 (%)    extractable sw =   99.35 (mm)
+24 March 2023(Day of year=83), fertiliser: 
+     
+   - Reading Fertiliser Type Parameters
+       150.00 of N as urea (urea_n)
+                                         added at depth   50.00 (layer   1)
+21 April 2023(Day of year=111), paddock.wheat: 
+      stage 5.0 floral_initiation
+                     biomass =         438.49 (g/m^2)   lai          =   6.275 (m^2/m^2)
+                     stover N conc =     2.67 (%)    extractable sw =   76.97 (mm)
+2 May 2023(Day of year=122), fertiliser: 
+     
+   - Reading Fertiliser Type Parameters
+       150.00 of N as urea (urea_n)
+                                         added at depth   50.00 (layer   1)
+12 May 2023(Day of year=132), paddock.wheat: 
+      stage 6.0 flowering
+                     biomass =         751.58 (g/m^2)   lai          =   5.489 (m^2/m^2)
+                     stover N conc =     1.80 (%)    extractable sw =   91.19 (mm)
+18 May 2023(Day of year=138), paddock.wheat: 
+      stage 7.0 start_grain_fill
+                     biomass =         840.05 (g/m^2)   lai          =   4.815 (m^2/m^2)
+                     stover N conc =     1.55 (%)    extractable sw =   64.71 (mm)
+6 June 2023(Day of year=157), paddock.wheat: 
+      stage 8.0 end_grain_fill
+                     biomass =        1124.00 (g/m^2)   lai          =   3.868 (m^2/m^2)
+                     stover N conc =     1.22 (%)    extractable sw =   87.17 (mm)
+15 June 2023(Day of year=166), clock: 
+     Simulation is terminating due to end criteria being met.
+

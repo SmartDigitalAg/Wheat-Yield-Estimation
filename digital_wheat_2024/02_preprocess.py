@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 
 def main():
     input_dir = './input/'
@@ -29,8 +29,11 @@ def main():
 
     # drop_cvi = [col for col in df.columns if not 'CVI' in col]
     # df = df[drop_cvi]
-    df = df.drop(columns=['반복', '조사지'])
-    df.to_csv("./output/data.csv", index=False, encoding='utf-8-sig')
+    data_apsim = pd.read_csv(input_dir + 'apsim_data_new_long.csv')
+    df = df.merge(data_apsim, on=['조사지', 'year'], how='left')
+    df = df.drop(columns=['반복'])
+    os.makedirs('./output', exist_ok=True)
+    df.to_csv("./output/data_apsim.csv", index=False, encoding='utf-8-sig')
 
 if __name__ == '__main__':
     main()

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib import font_manager, rc
 
+from sklearn.preprocessing import StandardScaler
 from xgboost import XGBRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
@@ -26,40 +27,53 @@ elif platform.system() == "Darwin":
 
 
 def get_model_x_y(df, y_value, model_name):
+    # Initialize model
     model = None
     if 'rf' in model_name:
         model = RandomForestRegressor(n_estimators=100, random_state=42)
     else:
         model = XGBRegressor(n_estimators=100, random_state=42, max_depth=3)
 
-    # X_cols = df.columns[df.columns.str.contains('수확기|개화기|분얼전기|분얼후기')].tolist()
+    # Separate features and target
     X = df.drop(columns=y_value)
     y = df[y_value]
-    return model, X, y
+
+    # Apply scaling to features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    return model, X_scaled, y, scaler
 
 def get_top_features(df, y_value, model_name, result_path):
-    model, X, y = get_model_x_y(df, y_value, model_name)
+    model, X, y, scaler = get_model_x_y(df, y_value, model_name)
 
     model.fit(X, y)
 
+    # Get feature importance
     feature_importance = model.feature_importances_
-    feature_importance_df = pd.DataFrame({'Feature': X.columns, 'Importance': feature_importance})
+    feature_names = df.drop(columns=y_value).columns  # Use original dataframe columns for feature names
+    feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': feature_importance})
     feature_importance_df = feature_importance_df.sort_values(by='Importance')
 
+    # Save and plot top 10 features
     top_10_features_df = feature_importance_df.nlargest(10, 'Importance')
-    top_10_features_df.to_csv((f'{result_path}.csv'), index=False, encoding='utf-8-sig')
-    draw_fig.featuere_importance_bar_plot(top_10_features_df, model_name, (f'{result_path}.png'))
+    top_10_features_df.to_csv(f'{result_path}.csv', index=False, encoding='utf-8-sig')
+    draw_fig.feature_importance_bar_plot(top_10_features_df, model_name, f'{result_path}.png')
 
     top_10_features_list = top_10_features_df['Feature'].to_list()
 
     return top_10_features_list
 
-def get_model_score(y_test, y_predict):
-    mae = mean_absolute_error(y_predict, y_test)
-    rmse = np.sqrt(mean_squared_error(y_test, y_predict))
-    r2score = r2_score(y_predict, y_test)
+def get_model_score(y_train, y_train_predict, y_test, y_test_predict):
+    train_mae = mean_absolute_error(y_train, y_train_predict)
+    train_rmse = np.sqrt(mean_squared_error(y_train, y_train_predict))
+    train_r2 = r2_score(y_train, y_train_predict)
 
-    score_dct = {'MAE': mae, 'RMSE': rmse, 'R2': r2score}
+    test_mae = mean_absolute_error(y_test, y_test_predict)
+    test_rmse = np.sqrt(mean_squared_error(y_test, y_test_predict))
+    test_r2 = r2_score(y_test, y_test_predict)
+    score_dct = {'Train': {'MAE': train_mae, 'RMSE': train_rmse, 'R2': train_r2},
+                 'Test': {'MAE': test_mae, 'RMSE': test_rmse, 'R2': test_r2}}
 
     return score_dct
 
@@ -67,12 +81,17 @@ def run_model(df, y_value, model_name, head_title, result_scatter_path):
     model, X, y = get_model_x_y(df, y_value, model_name)
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.6, random_state=42)
     model.fit(X_train, y_train)
-    y_predict = model.predict(X_test)
 
-    score_dct = get_model_score(y_test, y_predict)
+    y_train_predict = model.predict(X_train)
+    y_test_predict = model.predict(X_test)
 
-    draw_fig.model_result_scatter_plot(model, X_train, X_test, y_train, y_test, y_predict, score_dct, head_title, result_scatter_path)
+    # Reverse scaling for interpretability (if needed)
+
+    score_dct = get_model_score(y_train, y_train_predict, y_test, y_test_predict)
+
+    draw_fig.model_result_scatter_plot(model, X_train, X_test_original, y_train, y_test, y_test_predict, score_dct, head_title, result_scatter_path)
     return score_dct
+
 
 def select_columns(data_path, y_value, select_option, model_name, year, result_path=None):
 
@@ -118,12 +137,12 @@ def loop_model(years, model_names, select_options, data_path, y_value, result_di
     result_df.to_csv(result_save_path, index=False, encoding='utf-8-sig')
 
 def main():
-    result_dir = './output'
+    result_dir = '../output'
     data_path = os.path.join(result_dir, 'data.csv')
     result_save_path = os.path.join(result_dir, 'result.csv')
     y_value = '수량(g/m2)_수확기'
     years = [2023, 2024, '전체']
-    model_names = {'result_rf': 'RandomForest', 'result_xgb': "XGBoost"}
+    model_names = {'result_rf_scaler': 'RandomForest', 'result_xgb_scaler': "XGBoost"}
     select_options = {'growth': "생육조사", 'drone': "드론식생지수", 'top10':'상위10개변수'}
 
     loop_model(years, model_names, select_options, data_path, y_value, result_dir, result_save_path)
