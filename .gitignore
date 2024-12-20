@@ -5,3 +5,4 @@ kosis/두류생산량_원본
 kosis/두류생산량_전처리
 kosis_api
 .DS_Store
+digital_wheat_2024/__pycache__
