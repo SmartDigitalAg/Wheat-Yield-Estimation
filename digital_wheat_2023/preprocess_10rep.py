@@ -53,6 +53,7 @@ def preprocess_flowering_cols(df, check_date, col_seperator=None):
 
 def preprocess_flowering(df_growth, df_yield, df_200, df_gyeong, check_date):
     df_growth = preprocess_flowering_cols(df_growth, check_date, '\n')
+    # print(df_growth)
     df_yield = preprocess_flowering_cols(df_yield, check_date, 'Unnamed')
     df_200 = preprocess_flowering_cols(df_200, check_date, 'Unnamed')
     df_gyeong = preprocess_flowering_cols(df_gyeong, check_date, '.')
@@ -181,8 +182,8 @@ def preprocess_drone():
     # date_list = [col.split('_')[0] for col in df.columns if '_' in col]
     # ['230501', '230601', '230130', '230321', '230615', '230417', '230520']
     # ['230326', '230417', '230504', '230519', '230601', '230612']
-    date_dict = {'230130': '분얼전', '230321': '분얼전기', '230417': '분얼후기', '230501': '개화기', '230520': '개화후2주',
-                 '230601': '개화후4주', '230615': '수확기'}
+    date_dict = {'230321':'분얼전기', '230417':'분얼후기', '230501':'개화기', '230520':'개화후2주', '230601':'개화후4주',  '230615':'수확기'}
+    df = df[[col for col in df.columns if not '230130' in col]]
     df.columns = [f'{col.split("_")[1]}_{date_dict[col.split("_")[0]]}' if '_' in col else col for col in df.columns]
     df = df.rename(columns={'yield(kg/10a)': 'drone_yield'})
     df = df.drop(columns=['ID'])
@@ -209,6 +210,7 @@ def generate_data(filename):
     flowering2 = preprocess_flowering2(filename)
     flowering4 = preprocess_flowering4(filename)
     harvesting = preprocess_harvesting(filename)
+    harvesting = harvesting[['반복', '조사지', '수량(g/m2)_수확기']]
 
     drone = preprocess_drone()
 
@@ -216,6 +218,8 @@ def generate_data(filename):
     df_all = pd.merge(df_all, flowering1, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering2, on=['반복', '조사지'], how='inner')
     df_all = pd.merge(df_all, flowering4, on=['반복', '조사지'], how='inner')
+    df_all = pd.merge(df_all, harvesting, on=['반복', '조사지'], how='inner')
+
     # df_all = pd.merge(df_all, harvesting, on=['반복', '조사지'], how='inner')
     # df_all.to_csv("../output/iksan_data_plant.csv", index=False)
     df_all = pd.merge(df_all, drone, on=['반복', '조사지'], how='inner')
